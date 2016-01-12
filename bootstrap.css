@@ -1,0 +1,548 @@
+.btn {
+	-fx-font-size: 14;
+	-fx-background-insets: 0, 0, -1, 0;
+	-fx-background-radius: 4;
+	-fx-border-radius: 4;
+}
+
+.btn.btn-lg {
+	-fx-min-height: 46;
+	-fx-max-height: 46;
+	-fx-font-size: 18;
+}
+
+.btn.btn-sm {
+	-fx-min-height: 30;
+	-fx-max-height: 30;
+}
+
+.btn.btn-xs {
+	-fx-min-height: 22;
+	-fx-max-height: 22;
+	-fx-font-size: 10;
+}
+
+.menu-button.btn.primary > *, .menu-button.btn.success > *, .menu-button.btn.info > *, .menu-button.btn.warning > *, .menu-button.btn.danger > *,
+.split-menu-button.primary > *, .split-menu-button.success > *, .split-menu-button.info > *, .split-menu-button.warning > *, .split-menu-button.danger > * {
+	-fx-text-fill: white;
+}
+
+.btn.action-btn, .button.action-btn, .split-menu-button.action-btn {
+	-fx-min-width: 80;
+}
+
+.btn.first, .text-field.first {
+	-fx-border-radius: 4 0 0 4;
+}
+
+.btn.middle, .text-field.middle {
+	-fx-border-radius: 0;
+}
+
+.btn.last, .text-field.last {
+	-fx-border-radius: 0 4 4 0;
+}
+
+.btn.default {
+	-fx-background-color: white;
+	-fx-border-color: #cccccc;
+	-fx-text-fill: #333333;
+}
+
+.btn.default:hover {
+	-fx-background-color: #e6e6e6;
+	-fx-border-color: #acacac;
+}
+
+.btn.default:pressed,.btn.default:selected {
+	-fx-effect: innershadow(gaussian, #adadad, 10, 0, 0, 3);
+}
+
+.split-menu-button.default > .label {
+	-fx-border-color: #cccccc transparent #cccccc #cccccc;
+	-fx-border-radius: 2 0 0 2;
+	-fx-background-radius: 2 0 0 2;
+}
+
+.split-menu-button.default > .arrow-button {
+	-fx-border-color: #cccccc;
+	-fx-border-radius: 0 2 2 0;
+	-fx-background-radius: 0 2 2 0;
+}
+
+.split-menu-button.default > .label, .split-menu-button.default > .arrow-button {
+	-fx-background-color: white;
+	-fx-text-fill: #333333;
+}
+
+.split-menu-button.default:focused {
+	-fx-focus-color: #acacac;
+}
+
+.split-menu-button.default > .label:hover, .split-menu-button.default > .arrow-button:hover {
+	-fx-background-color: #e6e6e6;
+}
+
+.split-menu-button.default:pressed > .label, .split-menu-button.default > .arrow-button:pressed {
+	-fx-effect: innershadow(gaussian, #adadad, 10, 0, 0, 3);
+}
+
+.btn.primary {
+	-fx-background-color: #337ab7;
+	-fx-border-color: #2e6da4;
+	-fx-text-fill: white;
+}
+
+.btn.primary:hover {
+	-fx-border-color: #204d74;
+	-fx-background-color: #286090;
+}
+
+.btn.primary:pressed,.btn.primary:selected {
+	-fx-effect: innershadow(gaussian, #204d74, 10, 0, 0, 3);
+}
+
+.split-menu-button.primary > .label {
+	-fx-border-color: #2e6da4 transparent #2e6da4 #2e6da4;
+	-fx-border-radius: 2 0 0 2;
+	-fx-background-radius: 2 0 0 2;
+}
+
+.split-menu-button.primary > .arrow-button {
+	-fx-border-color: #2e6da4;
+	-fx-border-radius: 0 2 2 0;
+	-fx-background-radius: 0 2 2 0;
+}
+
+.split-menu-button.primary > .label, .split-menu-button.primary > .arrow-button {
+	-fx-background-color: #337ab7;
+	-fx-text-fill: white;
+}
+
+.split-menu-button.primary:focused {
+	-fx-focus-color: #286090;
+}
+
+.split-menu-button.primary > .label:hover, .split-menu-button.primary > .arrow-button:hover {
+	-fx-background-color: #255f92;
+}
+
+.split-menu-button.primary:pressed > .label, .split-menu-button.primary > .arrow-button:pressed {
+	-fx-effect: innershadow(gaussian, #204d74, 10, 0, 0, 3);
+}
+
+.btn.success {
+	-fx-background-color: #5cb85c;
+	-fx-border-color: #4cae4c;
+	-fx-text-fill: white;
+}
+
+.btn.success:hover {
+	-fx-border-color: #398439;
+	-fx-background-color: #449d44;
+}
+
+.btn.success:pressed,.btn.success:selected {
+	-fx-effect: innershadow(gaussian, #398439, 10, 0, 0, 3);
+}
+
+.split-menu-button.success > .label {
+	-fx-border-color: #4cae4c transparent #4cae4c #4cae4c;
+	-fx-border-radius: 2 0 0 2;
+	-fx-background-radius: 2 0 0 2;
+}
+
+.split-menu-button.success > .arrow-button {
+	-fx-border-color: #4cae4c;
+	-fx-border-radius: 0 2 2 0;
+	-fx-background-radius: 0 2 2 0;
+}
+
+.split-menu-button.success > .label, .split-menu-button.success > .arrow-button {
+	-fx-background-color: #5cb85c;
+	-fx-text-fill: white;
+}
+
+.split-menu-button.success:focused {
+	-fx-focus-color: #398439;
+}
+
+.split-menu-button.success > .label:hover, .split-menu-button.success > .arrow-button:hover {
+	-fx-background-color: #449d44;
+}
+
+.split-menu-button.success:pressed > .label, .split-menu-button.success > .arrow-button:pressed {
+	-fx-effect: innershadow(gaussian, #398439, 10, 0, 0, 3);
+}
+
+.btn.info {
+	-fx-background-color: #5bc0de;
+	-fx-border-color: #46b8da;
+	-fx-text-fill: white;
+}
+
+.btn.info:hover {
+	-fx-border-color: #269abc;
+	-fx-background-color: #31b0d5;
+}
+
+.btn.info:pressed,.btn.info:selected {
+	-fx-effect: innershadow(gaussian, #269abc, 10, 0, 0, 3);
+}
+
+.split-menu-button.info > .label {
+	-fx-border-color: #46b8da transparent #46b8da #46b8da;
+	-fx-border-radius: 2 0 0 2;
+	-fx-background-radius: 2 0 0 2;
+}
+
+.split-menu-button.info > .arrow-button {
+	-fx-border-color: #46b8da;
+	-fx-border-radius: 0 2 2 0;
+	-fx-background-radius: 0 2 2 0;
+}
+
+.split-menu-button.info > .label, .split-menu-button.info > .arrow-button {
+	-fx-background-color: #5bc0de;
+	-fx-text-fill: white;
+}
+
+.split-menu-button.info:focused {
+	-fx-focus-color: #269abc;
+}
+
+.split-menu-button.info > .label:hover, .split-menu-button.info > .arrow-button:hover {
+	-fx-background-color: #31b0d5;
+}
+
+.split-menu-button.info:pressed > .label, .split-menu-button.info > .arrow-button:pressed {
+	-fx-effect: innershadow(gaussian, #269abc, 10, 0, 0, 3);
+}
+
+.btn.warning {
+	-fx-background-color: #f0ad4e;
+	-fx-border-color: #eea236;
+	-fx-text-fill: white;
+}
+
+.btn.warning:hover {
+	-fx-border-color: #d58512;
+	-fx-background-color: #ec971f;
+}
+
+.btn.warning:pressed,.btn.warning:selected {
+	-fx-effect: innershadow(gaussian, #d58512, 10, 0, 0, 3);
+}
+
+.split-menu-button.warning > .label {
+	-fx-border-color: #eea236 transparent #eea236 #eea236;
+	-fx-border-radius: 2 0 0 2;
+	-fx-background-radius: 2 0 0 2;
+}
+
+.split-menu-button.warning > .arrow-button {
+	-fx-border-color: #eea236;
+	-fx-border-radius: 0 2 2 0;
+	-fx-background-radius: 0 2 2 0;
+}
+
+.split-menu-button.warning > .label, .split-menu-button.warning > .arrow-button {
+	-fx-background-color: #f0ad4e;
+	-fx-text-fill: white;
+}
+
+.split-menu-button.warning:focused {
+	-fx-focus-color: #d58512;
+}
+
+.split-menu-button.warning > .label:hover, .split-menu-button.warning > .arrow-button:hover {
+	-fx-background-color: #ec971f;
+}
+
+.split-menu-button.warning:pressed > .label, .split-menu-button.warning > .arrow-button:pressed {
+	-fx-effect: innershadow(gaussian, #d58512, 10, 0, 0, 3);
+}
+
+.btn.danger {
+	-fx-background-color: #d9534f;
+	-fx-border-color: #d43f3a;
+	-fx-text-fill: white;
+}
+
+.btn.danger:hover {
+	-fx-border-color: #ac2925;
+	-fx-background-color: #c9302c;
+}
+
+.btn.danger:pressed,.btn.danger:selected {
+	-fx-effect: innershadow(gaussian, #ac2925, 10, 0, 0, 3);
+}
+
+.split-menu-button.danger > .label {
+	-fx-border-color: #d43f3a transparent #d43f3a #d43f3a;
+	-fx-border-radius: 2 0 0 2;
+	-fx-background-radius: 2 0 0 2;
+}
+
+.split-menu-button.danger > .arrow-button {
+	-fx-border-color: #d43f3a;
+	-fx-border-radius: 0 2 2 0;
+	-fx-background-radius: 0 2 2 0;
+}
+
+.split-menu-button.danger > .label, .split-menu-button.danger > .arrow-button {
+	-fx-background-color: #d9534f;
+	-fx-text-fill: white;
+}
+
+.split-menu-button.danger:focused {
+	-fx-focus-color: #ac2925;
+}
+
+.split-menu-button.danger > .label:hover, .split-menu-button.danger > .arrow-button:hover {
+	-fx-background-color: #c9302c;
+}
+
+.split-menu-button.danger:pressed > .label, .split-menu-button.danger > .arrow-button:pressed {
+	-fx-effect: innershadow(gaussian, #ac2925, 10, 0, 0, 3);
+}
+
+.menu-item {
+	-fx-min-width: 200;
+}
+
+.menu-item:focused {
+	-fx-background-color: #f5f5f5;
+}
+
+.menu-item:focused > * {
+	-fx-text-fill: #262626;
+}
+
+.context-menu {
+	-fx-border-radius: 4;
+	-fx-background-radius: 4;
+	-fx-border-color: #bebec0;
+}
+
+.separator {
+	-fx-padding: 5 5 5 5;
+}
+
+.text-field {
+	-fx-pref-height: 30;
+}
+.combo-box,.choice-box,.color-picker,.date-picker {
+	-fx-border-radius: 4;
+	-fx-background-radius: 4;
+	-fx-pref-height: 30;
+}
+.combo-box:editable>.arrow-button {
+	-fx-background-color: white;
+}
+.combo-box:editable>.arrow-button:hover {
+	-fx-background-color: #e6e6e6;
+}
+.combo-box:editable>.arrow-button:pressed {
+	-fx-effect: innershadow(gaussian, #adadad, 10, 0, 0, 3);
+}
+.combo-box>.text-input,.date-picker>.text-input {
+	-fx-background-radius: 4 0 0 4;
+	-fx-border-width: 0;
+}
+
+.text-field, .text-area {
+	-fx-border-color: #cccccc;
+	-fx-background-color: white;
+	-fx-border-radius: 4;
+	-fx-background-radius: 4;
+	-fx-effect: innershadow(gaussian, transparent, 0, 0, 0, 0);
+}
+
+.text-field:focused, .text-area:focused {
+	-fx-border-color: #66afe9;
+	-fx-effect: dropshadow(gaussian, #66afe9, 10, 0, 0, 0);
+}
+
+.text-area .scroll-pane, .text-area .scroll-pane .content {
+	-fx-background-color: white;
+	-fx-background-radius: 4;
+}
+
+.tab-pane.plain .tab-header-background {
+	-fx-background-color: transparent;
+}
+
+.tab-pane .tab-header-area .tab {
+	-fx-border-radius: 4 4 0 0;
+	-fx-background-radius: 4 4 0 0;
+	-fx-background-color: #eeeeef;
+	-fx-border-color: #c2c2c2 #c2c2c2 transparent #c2c2c2;
+}
+
+.tab-pane .tab-header-area .tab:selected {
+	-fx-focus-color: transparent;
+	-fx-border-color: #adacac #adacac transparent #adacac;
+	-fx-background-color: white;
+}
+
+.tab-pane .tab-header-area .tab .tab-label {
+	-fx-focus-color: transparent;
+}
+
+.scroll-bar {
+	-fx-background-color: #F7F6F2;
+	-fx-background-radius: 0;
+	-fx-block-increment: 50;
+}
+
+.corner {
+	-fx-background-color: #f7f6f2;
+}
+
+.scroll-bar .decrement-button, .scroll-bar .decrement-arrow {
+	visibility: hidden;
+	-fx-pref-height: 1;
+	-fx-pref-width: 1;
+}
+
+.scroll-bar .increment-button, .scroll-bar .increment-arrow {
+	visibility: hidden;
+	-fx-pref-height: 1;
+	-fx-pref-width: 1;
+}
+
+.scroll-bar:vertical {
+	-fx-pref-width: 12;
+}
+
+.scroll-bar:horizontal {
+	-fx-pref-height: 12;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-background-radius: 5;
+}
+
+.scroll-bar:vertical .track-background,
+.scroll-bar:horizontal .track-background {
+	-fx-background-color: transparent;
+	-fx-background-insets: 0;
+	-fx-background-radius: 5;
+}
+
+.scroll-bar:horizontal .thumb {
+	-fx-background-color: #c9c9c9;
+	-fx-background-insets: 2 0 2 0;
+	-fx-background-radius: 5;
+}
+
+.scroll-bar:vertical .thumb {
+	-fx-background-color: #c9c9c9;
+	-fx-background-insets: 0 2 0 2;
+	-fx-background-radius: 5;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+	-fx-background-color: #b5b5b5;
+}
+
+.scroll-bar:horizontal .thumb:pressed,
+.scroll-bar:vertical .thumb:pressed {
+	-fx-background-color: #b5b5b5;
+}
+
+.scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 5;
+	-fx-padding: 5;
+}
+
+.scroll-bar:horizontal .increment-button, .scroll-bar:horizontal .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 5;
+	-fx-padding: 5;
+}
+
+.scroll-bar:vertical:focused,
+.scroll-bar:horizontal:focused {
+	-fx-background-color: transparent, rgb(96, 96, 96), rgb(96, 96, 96);
+}
+
+.menu-bar {
+	-fx-background-color: white;
+}
+.pagination>.pagination-control>.control-box {
+	-fx-spacing: -1;
+}
+
+.progress-bar>.track {
+	-fx-pref-height: 10;
+	-fx-background-color: #f4f4f4;
+	-fx-background-radius: 3;
+	-fx-effect: innershadow(gaussian, #e4e4e4, 3, 0, 0, 1);
+}
+.progress-bar>.bar {
+	-fx-background-insets: 0;
+	-fx-background-color: #337ab7;
+}
+.progress-bar.success>.bar {
+	-fx-background-insets: 0;
+	-fx-background-color: #5cb85c;
+}
+.progress-bar.info>.bar {
+	-fx-background-insets: 0;
+	-fx-background-color: #5bc0de;
+}
+.progress-bar.warning>.bar {
+	-fx-background-insets: 0;
+	-fx-background-color: #f0ad4e;
+}
+.progress-bar.danger>.bar {
+	-fx-background-insets: 0;
+	-fx-background-color: #d9534f;
+}
+.tooltip {
+	-fx-background: white;
+	-fx-text-fill: #333333;
+	-fx-background-color: white;
+	-fx-background-radius: 4px;
+	-fx-border-radius: 4px;
+	-fx-border-color: #C0C0C0;
+	-fx-background-insets: 0;
+	-fx-padding: 0.667em 0.75em 0.667em 0.75em; /* 10px */
+	-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.5) , 10, 0.0 , 0 , 3 );
+	-fx-font-size: 0.85em;
+}
+.tooltip.success {
+	-fx-background: #dff0d8;
+	-fx-background-color: #dff0d8;
+	-fx-text-fill: #99bb96;
+	-fx-border-color: #d6e9c6;
+}
+.tooltip.info {
+	-fx-background: #d8ecf6;
+	-fx-background-color: #d8ecf6;
+	-fx-text-fill: #31708f;
+	-fx-border-color: #bce8f1;
+}
+
+.tooltip.warning {
+	-fx-background: #fcf8e3;
+	-fx-background-color: #fcf8e3;
+	-fx-text-fill: #8a6e3c;
+	-fx-border-color: #faebcc;
+}
+.tooltip.danger {
+	-fx-background: #f2dede;
+	-fx-background-color: #f2dede;
+	-fx-text-fill: #a94442;
+	-fx-border-color: #ebccd1;
+}
+
+
+

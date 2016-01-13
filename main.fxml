@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.control.*?>
@@ -7,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0" prefWidth="800.0" stylesheets="@bootstrap.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3000.0" prefWidth="800.0" stylesheets="@bootstrap.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ScrollPane prefHeight="600.0" prefViewportHeight="600.0" prefViewportWidth="800.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
@@ -418,10 +419,39 @@
                         <AnchorPane prefHeight="2000.0" prefWidth="2000.0" />
                      </content>
                   </ScrollPane>
-                  <TitledPane animated="false" text="untitled">
+                  <TitledPane prefHeight="100.0" text="Titled Pane">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="20.0" prefWidth="866.0" />
                     </content>
+                  </TitledPane>
+                  <TitledPane prefHeight="100.0" styleClass="primary" text="Primay">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="20.0" prefWidth="866.0">
+                           <children>
+                              <Text layoutX="31.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="panel content" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane prefHeight="100.0" styleClass="success" text="Success">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="20.0" prefWidth="866.0" />
+                     </content>
+                  </TitledPane>
+                  <TitledPane prefHeight="100.0" styleClass="info" text="Info">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="20.0" prefWidth="866.0" />
+                     </content>
+                  </TitledPane>
+                  <TitledPane prefHeight="100.0" styleClass="warning" text="Warning">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="20.0" prefWidth="866.0" />
+                     </content>
+                  </TitledPane>
+                  <TitledPane prefHeight="100.0" styleClass="danger" text="Danger">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="20.0" prefWidth="866.0" styleClass="error" />
+                     </content>
                   </TitledPane>
                   <TableView prefHeight="62.0" prefWidth="868.0">
                     <columns>
@@ -429,6 +459,46 @@
                       <TableColumn prefWidth="75.0" text="C2" />
                     </columns>
                   </TableView>
+                  <ToolBar prefHeight="40.0" prefWidth="200.0">
+                    <items>
+                        <TextField prefWidth="212.0" />
+                        <Button mnemonicParsing="false" text="Toolbar">
+                           <styleClass>
+                              <String fx:value="btn" />
+                              <String fx:value="success" />
+                           </styleClass>
+                        </Button>
+                    </items>
+                  </ToolBar>
+                  <ToolBar orientation="VERTICAL" prefHeight="216.0">
+                     <items>
+                        <Button mnemonicParsing="false" text="V-Toolbar">
+                           <styleClass>
+                              <String fx:value="btn" />
+                              <String fx:value="warning" />
+                           </styleClass>
+                        </Button>
+                     </items>
+                  </ToolBar>
+                  <Accordion>
+                    <panes>
+                      <TitledPane animated="false" prefHeight="100.0" prefWidth="868.0" styleClass="primary" text="accordion 1">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" styleClass="info" text="accordion 2">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" text="accordion 3">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </TitledPane>
+                    </panes>
+                  </Accordion>
                </children>
             </VBox>
          </content>

@@ -7,6 +7,8 @@ no worry, jbootx is what u r lookin for!
 have a look at it!
 
 ![](images/overview.png)
+![](images/overview1.png)
+![](images/overview2.png)
 
 it's very easy to use! that means,no java code is required!
 

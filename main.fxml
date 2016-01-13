@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3000.0" prefWidth="800.0" stylesheets="@bootstrap.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3000.0" prefWidth="1000.0" stylesheets="@bootstrap.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ScrollPane prefHeight="600.0" prefViewportHeight="600.0" prefViewportWidth="800.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
@@ -22,48 +22,33 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <Button mnemonicParsing="false" text="Default">
-                           <styleClass>
-                              <String fx:value="default" />
-                              <String fx:value="btn" />
-                              <String fx:value="action-btn" />
-                           </styleClass>
-                        </Button>
-                        <Button mnemonicParsing="false" style="-fx-background-insets: 0,0,-1,0;" text="Primary">
-                           <styleClass>
-                              <String fx:value="primary" />
-                              <String fx:value="btn" />
-                              <String fx:value="action-btn" />
-                           </styleClass>
-                        </Button>
-                        <Button mnemonicParsing="false" text="Success">
+                        <Button mnemonicParsing="false" styleClass="default" text=".default" />
+                        <Button mnemonicParsing="false" style="-fx-background-insets: 0,0,-1,0;" styleClass="primary" text=".primary" />
+                        <Button mnemonicParsing="false" text=".success">
                            <styleClass>
                               <String fx:value="success" />
                               <String fx:value="btn" />
-                              <String fx:value="action-btn" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" text="Info">
+                        <Button mnemonicParsing="false" text=".info">
                            <styleClass>
                               <String fx:value="info" />
-                              <String fx:value="btn" />
                               <String fx:value="action-btn" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" text="Warning">
+                        <Button mnemonicParsing="false" text=".warning">
                            <styleClass>
                               <String fx:value="warning" />
-                              <String fx:value="btn" />
                               <String fx:value="action-btn" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" text="Danger">
+                        <Button mnemonicParsing="false" text=".danger">
                            <styleClass>
                               <String fx:value="danger" />
-                              <String fx:value="btn" />
                               <String fx:value="action-btn" />
                            </styleClass>
                         </Button>
+                        <Button mnemonicParsing="false" text="Button" />
                      </children>
                   </HBox>
                   <HBox prefHeight="39.0">
@@ -71,73 +56,71 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <Button mnemonicParsing="false" text="Default">
+                        <Button mnemonicParsing="false" text=".default.first">
                            <styleClass>
-                              <String fx:value="btn" />
                               <String fx:value="default" />
                               <String fx:value="first" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" text="Primary">
+                        <Button mnemonicParsing="false" text=".primary.middle">
                            <styleClass>
-                              <String fx:value="btn" />
                               <String fx:value="primary" />
                               <String fx:value="middle" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" text="Success">
+                        <Button mnemonicParsing="false" text=".success.middle">
                            <styleClass>
-                              <String fx:value="btn" />
                               <String fx:value="success" />
                               <String fx:value="middle" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" text="Info">
+                        <Button mnemonicParsing="false" text=".info.last">
                            <styleClass>
-                              <String fx:value="btn" />
                               <String fx:value="info" />
-                              <String fx:value="middle" />
+                              <String fx:value="last" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" text="Warning">
+                        <Button mnemonicParsing="false" text=".warning.first">
                            <styleClass>
-                              <String fx:value="btn" />
                               <String fx:value="warning" />
-                              <String fx:value="middle" />
+                              <String fx:value="first" />
                            </styleClass>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" text="Danger">
+                        <Button mnemonicParsing="false" text=".warning.last">
                            <styleClass>
-                              <String fx:value="btn" />
                               <String fx:value="danger" />
                               <String fx:value="last" />
                            </styleClass>
                         </Button>
+                        <MenuButton mnemonicParsing="false" text="mb">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                          </items>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </MenuButton>
                      </children>
                   </HBox>
                   <HBox prefHeight="39.0" spacing="5.0">
                      <children>
-                        <MenuButton mnemonicParsing="false" text="Default">
+                        <MenuButton mnemonicParsing="false" styleClass="default" text=".default">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Action 1" />
                               <MenuItem mnemonicParsing="false" text="Action 2" />
                            </items>
-                           <styleClass>
-                              <String fx:value="default" />
-                              <String fx:value="btn" />
-                           </styleClass>
                         </MenuButton>
-                        <MenuButton mnemonicParsing="false" text="Primary">
+                        <MenuButton mnemonicParsing="false" styleClass="primary" text=".primary">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Action 1" />
                               <MenuItem mnemonicParsing="false" text="Action 2" />
                            </items>
-                           <styleClass>
-                              <String fx:value="primary" />
-                              <String fx:value="btn" />
-                           </styleClass>
                         </MenuButton>
-                        <MenuButton mnemonicParsing="false" text="Success">
+                        <MenuButton mnemonicParsing="false" text=".success">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Action 1" />
                               <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -147,7 +130,7 @@
                               <String fx:value="btn" />
                            </styleClass>
                         </MenuButton>
-                        <MenuButton mnemonicParsing="false" text="Info">
+                        <MenuButton mnemonicParsing="false" text=".info">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Action 1" />
                               <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -155,9 +138,10 @@
                            <styleClass>
                               <String fx:value="info" />
                               <String fx:value="btn" />
+                              <String fx:value="first" />
                            </styleClass>
                         </MenuButton>
-                        <MenuButton mnemonicParsing="false" text="Warning">
+                        <MenuButton mnemonicParsing="false" text=".warning">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Action 1" />
                               <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -165,9 +149,10 @@
                            <styleClass>
                               <String fx:value="warning" />
                               <String fx:value="btn" />
+                              <String fx:value="middle" />
                            </styleClass>
                         </MenuButton>
-                        <MenuButton mnemonicParsing="false" text="Danger">
+                        <MenuButton mnemonicParsing="false" text=".danger">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Action 1" />
                               <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -175,6 +160,7 @@
                            <styleClass>
                               <String fx:value="danger" />
                               <String fx:value="btn" />
+                              <String fx:value="last" />
                            </styleClass>
                         </MenuButton>
                      </children>
@@ -182,36 +168,101 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
+                  <HBox prefHeight="40.0" spacing="5.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <children>
+                        <SplitMenuButton mnemonicParsing="false" text=".default.first">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                          </items>
+                           <styleClass>
+                              <String fx:value="default" />
+                              <String fx:value="first" />
+                           </styleClass>
+                        </SplitMenuButton>
+                        <SplitMenuButton mnemonicParsing="false" styleClass="primary" text=".primary">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                           </items>
+                        </SplitMenuButton>
+                        <SplitMenuButton mnemonicParsing="false" text=".success.middle">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                           </items>
+                           <styleClass>
+                              <String fx:value="success" />
+                              <String fx:value="middle" />
+                           </styleClass>
+                        </SplitMenuButton>
+                        <SplitMenuButton mnemonicParsing="false" text=".info">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                           </items>
+                           <styleClass>
+                              <String fx:value="info" />
+                              <String fx:value="action-btn" />
+                           </styleClass>
+                        </SplitMenuButton>
+                        <SplitMenuButton mnemonicParsing="false" text=".warning.last">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                           </items>
+                           <styleClass>
+                              <String fx:value="warning" />
+                              <String fx:value="last" />
+                           </styleClass>
+                        </SplitMenuButton>
+                        <SplitMenuButton mnemonicParsing="false" text=".danger">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                           </items>
+                           <styleClass>
+                              <String fx:value="danger" />
+                              <String fx:value="action-btn" />
+                           </styleClass>
+                        </SplitMenuButton>
+                        <SplitMenuButton mnemonicParsing="false" text="smb">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                          </items>
+                        </SplitMenuButton>
+                     </children>
+                  </HBox>
                   <HBox prefHeight="39.0" spacing="5.0">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <Button mnemonicParsing="false" text="btn-lg">
+                        <Button mnemonicParsing="false" text=".lg">
                            <styleClass>
-                              <String fx:value="btn" />
                               <String fx:value="default" />
-                              <String fx:value="btn-lg" />
+                              <String fx:value="lg" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" text="btn-sm">
+                        <Button mnemonicParsing="false" text=".sm">
                            <styleClass>
-                              <String fx:value="btn" />
-                              <String fx:value="default" />
-                              <String fx:value="btn-sm" />
+                              <String fx:value="info" />
+                              <String fx:value="sm" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" text="btn-xs">
+                        <Button mnemonicParsing="false" text=".xs">
                            <styleClass>
-                              <String fx:value="btn" />
-                              <String fx:value="default" />
-                              <String fx:value="btn-xs" />
+                              <String fx:value="warning" />
+                              <String fx:value="xs" />
                            </styleClass>
                         </Button>
-                        <Button mnemonicParsing="false" text="action-btn">
+                        <Button mnemonicParsing="false" text=".action-btn">
                            <styleClass>
-                              <String fx:value="btn" />
-                              <String fx:value="default" />
+                              <String fx:value="danger" />
                               <String fx:value="action-btn" />
                            </styleClass>
                         </Button>
@@ -222,9 +273,15 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <PasswordField promptText="password" styleClass="first" />
-                        <TextField styleClass="middle" />
-                        <TextField styleClass="last" />
+                        <PasswordField promptText=".first" styleClass="first">
+                           <HBox.margin>
+                              <Insets right="-1.0" />
+                           </HBox.margin></PasswordField>
+                        <TextField promptText=".middle" styleClass="middle">
+                           <HBox.margin>
+                              <Insets right="-1.0" />
+                           </HBox.margin></TextField>
+                        <TextField promptText=".last" styleClass="last" />
                         <TextField>
                            <HBox.margin>
                               <Insets left="10.0" />
@@ -237,10 +294,9 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <children>
-                        <TextArea prefHeight="78.0" prefWidth="201.0" />
-                        <TextField styleClass="first">
+                        <TextField promptText=".first" styleClass="first">
                            <HBox.margin>
-                              <Insets left="5.0" right="-1.0" />
+                              <Insets right="-1.0" />
                            </HBox.margin>
                         </TextField>
                         <Button mnemonicParsing="false" text="Search">
@@ -253,57 +309,21 @@
                               <Insets />
                            </HBox.margin>
                         </Button>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="40.0" spacing="5.0">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                     <children>
-                        <SplitMenuButton mnemonicParsing="false" styleClass="default" text="Default">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
-                          </items>
-                        </SplitMenuButton>
-                        <SplitMenuButton mnemonicParsing="false" styleClass="primary" text="Primary">
-                           <items>
-                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                              <MenuItem mnemonicParsing="false" text="Action 2" />
-                           </items>
-                        </SplitMenuButton>
-                        <SplitMenuButton mnemonicParsing="false" styleClass="success" text="Success">
-                           <items>
-                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                              <MenuItem mnemonicParsing="false" text="Action 2" />
-                           </items>
-                        </SplitMenuButton>
-                        <SplitMenuButton mnemonicParsing="false" text="Info">
-                           <items>
-                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                              <MenuItem mnemonicParsing="false" text="Action 2" />
-                           </items>
-                           <styleClass>
-                              <String fx:value="info" />
-                              <String fx:value="action-btn" />
-                           </styleClass>
-                        </SplitMenuButton>
-                        <SplitMenuButton mnemonicParsing="false" styleClass="warning" text="Warning">
-                           <items>
-                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                              <MenuItem mnemonicParsing="false" text="Action 2" />
-                           </items>
-                        </SplitMenuButton>
-                        <SplitMenuButton mnemonicParsing="false" text="Danger">
-                           <items>
-                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                              <MenuItem mnemonicParsing="false" text="Action 2" />
-                           </items>
-                           <styleClass>
-                              <String fx:value="danger" />
-                              <String fx:value="action-btn" />
-                           </styleClass>
-                        </SplitMenuButton>
+                        <TextArea prefHeight="78.0" prefWidth="201.0">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></TextArea>
+                        <TextArea prefHeight="69.0" prefWidth="80.0" promptText=".first" styleClass="first">
+                           <HBox.margin>
+                              <Insets left="5.0" right="-1.0" />
+                           </HBox.margin>
+                        </TextArea>
+                        <TextArea prefHeight="69.0" prefWidth="80.0" promptText=".middle" styleClass="middle">
+                           <HBox.margin>
+                              <Insets right="-1.0" />
+                           </HBox.margin>
+                        </TextArea>
+                        <TextArea prefHeight="69.0" prefWidth="80.0" promptText=".last" styleClass="last" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5.0">
@@ -373,11 +393,10 @@
                   <ProgressBar prefHeight="20.0" prefWidth="600.0" progress="0.41" styleClass="warning" />
                   <Label text=".danger" />
                   <ProgressBar prefHeight="20.0" prefWidth="600.0" progress="0.3" styleClass="danger" />
-                  <HBox>
+                  <HBox alignment="CENTER_LEFT">
                      <children>
-                        <ToggleButton mnemonicParsing="false" text="toggleA">
+                        <ToggleButton mnemonicParsing="false" text=".default.first">
                            <styleClass>
-                              <String fx:value="btn" />
                               <String fx:value="default" />
                               <String fx:value="first" />
                            </styleClass>
@@ -385,29 +404,39 @@
                               <ToggleGroup fx:id="aaa" />
                            </toggleGroup>
                         </ToggleButton>
-                        <ToggleButton mnemonicParsing="false" text="toggleB" toggleGroup="$aaa">
+                        <ToggleButton mnemonicParsing="false" text=".success.last" toggleGroup="$aaa">
                            <styleClass>
-                              <String fx:value="btn" />
                               <String fx:value="success" />
                               <String fx:value="last" />
                            </styleClass>
+                           <HBox.margin>
+                              <Insets left="-1.0" />
+                           </HBox.margin>
                         </ToggleButton>
-                        <Button mnemonicParsing="false" text="tooltip-success">
+                        <Label text="tooltips">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Button mnemonicParsing="false" styleClass="success" text=".success">
                            <tooltip>
                               <Tooltip styleClass="success" text="success" />
                            </tooltip>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" text="tooltip-info">
+                        <Button mnemonicParsing="false" styleClass="info" text=".info">
                            <tooltip>
                               <Tooltip styleClass="info" text="info" />
                            </tooltip>
                         </Button>
-                        <Button mnemonicParsing="false" text="tooltip-warning">
+                        <Button mnemonicParsing="false" styleClass="warning" text=".warning">
                            <tooltip>
                               <Tooltip styleClass="warning" text="warning" />
                            </tooltip>
                         </Button>
-                        <Button mnemonicParsing="false" text="tooltip-danger">
+                        <Button mnemonicParsing="false" styleClass="danger" text=".danger">
                            <tooltip>
                               <Tooltip styleClass="danger" text="danger" />
                            </tooltip>
@@ -453,15 +482,22 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="20.0" prefWidth="866.0" styleClass="error" />
                      </content>
                   </TitledPane>
-                  <TableView prefHeight="62.0" prefWidth="868.0">
+                  <TableView prefHeight="125.0" prefWidth="868.0" tableMenuButtonVisible="true">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
+                      <TableColumn prefWidth="150.0" text="Column1" />
+                      <TableColumn minWidth="0.0" prefWidth="75.0" text="Column2" />
+                        <TableColumn minWidth="0.0" prefWidth="500.0" text="Column X">
+                           <columns>
+                              <TableColumn prefWidth="200.0" text="Column X" />
+                              <TableColumn prefWidth="200.0" text="Column X" />
+                           </columns>
+                        </TableColumn>
                     </columns>
                   </TableView>
                   <ToolBar prefHeight="40.0" prefWidth="200.0">
                     <items>
                         <TextField prefWidth="212.0" />
+                        <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="1.0" />
                         <Button mnemonicParsing="false" text="Toolbar">
                            <styleClass>
                               <String fx:value="btn" />
@@ -478,6 +514,7 @@
                               <String fx:value="warning" />
                            </styleClass>
                         </Button>
+                        <Separator prefHeight="13.0" prefWidth="0.0" />
                      </items>
                   </ToolBar>
                   <Accordion>
@@ -506,6 +543,7 @@
             <ContextMenu>
               <items>
                 <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
                   <Menu mnemonicParsing="false" text="Unspecified Menu">
                     <items>
                       <MenuItem mnemonicParsing="false" text="Action 1" />

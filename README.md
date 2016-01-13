@@ -16,20 +16,6 @@ it's very easy to use! that means,no java code is required!
 ~~~
 scene.getStylesheets().add(Main.class.getResource("bootstrap.css").toExternalForm());
 ~~~
-Here we go!!
-####Buttons
-![](images/buttons.png)
-there r 6 types of control
->default
-
->primary
-
->success
-
->info
-
->warning
-
->danger
+Enjoy your self!
 
 ##look into the main.fxml and learn how to use it!

@@ -42,7 +42,7 @@
 	-fx-text-fill: white;
 }
 
-.button.action, .split-menu-button.action {
+.button.action-btn, .split-menu-button.action-btn {
 	-fx-min-width: 80;
 }
 

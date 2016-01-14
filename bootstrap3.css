@@ -42,7 +42,7 @@
 	-fx-text-fill: white;
 }
 
-.button.action-btn, .split-menu-button.action-btn {
+.button.action-btn, .split-menu-button.action-btn, .menu-button.action-btn {
 	-fx-min-width: 80;
 }
 
@@ -399,6 +399,9 @@
 .menu-item:focused > * {
 	-fx-text-fill: #262626;
 }
+.menu-item:focused .arrow {
+	-fx-background-color: #333333;
+}
 
 .context-menu {
 	-fx-border-radius: 4;
@@ -463,12 +466,15 @@
 	-fx-border-radius: 4 4 0 0;
 	-fx-background-radius: 4 4 0 0;
 	-fx-background-color: #eeeeef;
-	-fx-border-color: #c2c2c2 #c2c2c2 transparent #c2c2c2;
+	-fx-border-color: #DEDEDD #DEDEDD transparent #DEDEDD;
 }
 
 .tab-pane .tab-header-area .tab:selected {
 	-fx-focus-color: transparent;
-	-fx-border-color: #adacac #adacac transparent #adacac;
+	-fx-border-color: #C8C8C8 #C8C8C8 transparent #C8C8C8;
+	-fx-background-color: white;
+}
+.tab-pane > .tab-content-area {
 	-fx-background-color: white;
 }
 
@@ -676,6 +682,7 @@
 	-fx-background-radius: 0 0 4 4;
 	-fx-border-radius: 0 0 4 4;
 	-fx-border-color: #dddddd;
+	/*-fx-padding: -11;*/
 }
 
 .titled-pane.primary {
@@ -773,6 +780,31 @@
 .filler,.column-header,.show-hide-columns-button {
 	-fx-background-color: #dddddd, white, white;
 }
+.show-hide-columns-button {
+	-fx-border-width: 0;
+	-fx-background-insets: 0 0 1 1;
+}
 .column-header:hover,.show-hide-columns-button:hover {
 	-fx-background-color: #dddddd, white, #f8f8f8;
 }
+.column-header-background > .filler {
+	-fx-border-color: transparent #c8c8c8 transparent transparent;
+	-fx-border-insets: 0 1 0 0;
+}
+.column-drag-header {
+	-fx-background-color: #2fb254;
+}
+
+VBox > .button.first,
+VBox > .split-menu-button.first,
+VBox > .menu-button.first {
+	-fx-border-radius: 4 4 0 0;
+	-fx-background-radius: 4 4 0 0;
+}
+VBox > .button.last,
+VBox > .split-menu-button.last,
+VBox > .menu-button.last {
+	-fx-border-radius: 0 0 4 4;
+	-fx-background-radius: 0 0 4 4;
+}
+

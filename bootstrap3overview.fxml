@@ -517,13 +517,13 @@
                     </menus>
                   </MenuBar>
                   <HTMLEditor htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" prefHeight="200.0" prefWidth="506.0" />
-                  <TabPane prefHeight="175.0" prefWidth="696.0" styleClass="plain" tabClosingPolicy="ALL_TABS">
+                  <TabPane prefHeight="100.0" prefWidth="868.0" styleClass="plain" tabClosingPolicy="ALL_TABS">
                     <tabs>
                       <Tab text="Tab 1">
                         <content>
-                          <AnchorPane minHeight="0.0" prefHeight="180.0">
+                          <AnchorPane minHeight="0.0" prefHeight="60.0" prefWidth="868.0">
                                  <children>
-                                    <Label layoutX="22.0" layoutY="14.0" text="tab 1" />
+                                    <Label layoutX="22.0" layoutY="14.0" text=".plain" />
                                  </children>
                               </AnchorPane>
                         </content>
@@ -533,6 +533,24 @@
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="72.0" prefWidth="694.0">
                                  <children>
                                     <Label layoutX="123.0" layoutY="26.0" text="tab 2" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+                  <TabPane prefHeight="114.0" prefWidth="868.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="Tab 1">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </Tab>
+                      <Tab text="Tab 2">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="52.0" layoutY="23.0" text="default tabpane" />
                                  </children>
                               </AnchorPane>
                         </content>

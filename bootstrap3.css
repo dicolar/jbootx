@@ -458,6 +458,9 @@
 	-fx-background-radius: 4;
 }
 
+.tab-pane .tab-header-background {
+	-fx-background-color: #f4f4f4;
+}
 .tab-pane.plain .tab-header-background {
 	-fx-background-color: transparent;
 }

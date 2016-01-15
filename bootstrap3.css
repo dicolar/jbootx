@@ -1,3 +1,7 @@
+.root {
+	-fx-body-color : #F5F5F5;
+	-fx-outer-border : #cecece;
+}
 .button,.menu-button,.toggle-button {
 	-fx-font-size: 14;
 	-fx-background-radius: 4;
@@ -468,14 +472,26 @@
 .tab-pane .tab-header-area .tab {
 	-fx-border-radius: 4 4 0 0;
 	-fx-background-radius: 4 4 0 0;
-	-fx-background-color: #eeeeef;
-	-fx-border-color: #DEDEDD #DEDEDD transparent #DEDEDD;
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-padding: 3 10 5 10;
+}
+
+.tab-pane .tab-header-area .tab .tab-label {
+	-fx-text-fill: #337ab7;
+}
+
+.tab-pane .tab-header-area .tab:hover {
+	-fx-background-color: #eeeeee;
 }
 
 .tab-pane .tab-header-area .tab:selected {
 	-fx-focus-color: transparent;
-	-fx-border-color: #C8C8C8 #C8C8C8 transparent #C8C8C8;
+	-fx-border-color: #dddddd #dddddd white #dddddd;
 	-fx-background-color: white;
+}
+.tab-pane .tab-header-area .tab:selected .tab-label {
+	-fx-text-fill: #333333;
 }
 .tab-pane > .tab-content-area {
 	-fx-background-color: white;
@@ -487,6 +503,17 @@
 
 .tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
 	-fx-border-color: transparent;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-close-button {
+	-fx-background-color: #337ab7;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab:selected > .tab-container > .tab-close-button {
+	-fx-background-color: #333333;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-close-button:hover {
+	-fx-background-color: red;
+	-fx-cursor: hand;
 }
 
 .scroll-bar {
@@ -622,7 +649,7 @@
 
 .progress-bar.warning > .bar {
 	-fx-background-insets: 0;
-	-fx-background-color: #f0ad4e;
+	-fx-background-color: #f0ad4e
 }
 
 .progress-bar.danger > .bar {
@@ -791,7 +818,7 @@
 	-fx-background-color: #dddddd, white, #f8f8f8;
 }
 .column-header-background > .filler {
-	-fx-border-color: transparent #c8c8c8 transparent transparent;
+	-fx-border-color: transparent #dddddd transparent transparent;
 	-fx-border-insets: 0 1 0 0;
 }
 .column-drag-header {
@@ -811,3 +838,103 @@ VBox > .menu-button.last {
 	-fx-background-radius: 0 0 4 4;
 }
 
+/*split pane*/
+.split-pane > .split-pane-divider {
+	-fx-background-color: white;
+	-fx-border-color: #eeeeee;
+	-fx-pref-width: 8;
+}
+.split-pane:horizontal > .split-pane-divider {
+	-fx-background-insets: 0, 0 1 0 1;
+	-fx-border-width: 0 1 0 1;
+}
+/* vertical the two nodes are placed on top of each other. */
+.split-pane:vertical > .split-pane-divider {
+	-fx-background-insets: 0, 1 0 1 0;
+	-fx-border-width: 1 0 1 0;
+}
+.split-pane > .split-pane-divider:hover {
+	-fx-background-color: #E0E0E0;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * CheckBox                                                                    *
+ *                                                                             *
+ ******************************************************************************/
+.check-box > .box {
+	-fx-background-radius: 3;
+	/*-fx-padding: 0.166667em 0.166667em 0.25em 0.25em; !* 2 2 3 3 *!*/
+	-fx-padding:0;
+	-fx-border-color: #56c0e0;
+	-fx-border-radius: 3;
+	-fx-background-color: white;
+}
+.check-box > .box > .mark {
+	-fx-background-color: null;
+	-fx-padding: 0.416667em 0.416667em 0.5em 0.5em; /* 5 5 6 6 */
+	-fx-shape: "M927.936 272.992l-68.288-68.288c-12.608-12.576-32.96-12.576-45.536 0l-409.44 409.44-194.752-196.16c-12.576-12.576-32.928-12.576-45.536 0l-68.288 68.288c-12.576 12.608-12.576 32.96 0 45.536l285.568 287.488c12.576 12.576 32.96 12.576 45.536 0l500.736-500.768c12.576-12.544 12.576-32.96 0-45.536z";
+	-fx-background-insets: -3 -3 1 0;
+}
+.check-box {
+	-fx-label-padding: 0.2em 0.0em 0.3em 0.416667em; /* 0 0 0 5 */
+	-fx-text-fill: -fx-text-background-color;
+	-fx-padding: 0 0 2 0;
+}
+.check-box:indeterminate > .box {
+	-fx-padding: 0;
+}
+.check-box:selected > .box > .mark {
+	-fx-background-color: #56c0e0;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * RadioButton                                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.radio-button {
+	-fx-label-padding: 0.0em 0.0em 0.1em 0.416667em; /* 0 0 0 5 */
+	-fx-text-fill: -fx-text-background-color;
+	-fx-padding: 0 0 .5 0;
+}
+.radio-button > .radio,
+.radio-button:focused > .radio  {
+	-fx-border-color: #56c0e0;
+	-fx-border-radius: 1em;
+	-fx-background-radius: 1.0em; /* large value to make sure this remains circular */
+	-fx-padding: 1 2 3 2;
+	-fx-background-color: white;
+}
+.radio-button > .radio > .dot {
+	-fx-background-color: transparent;
+	-fx-background-radius: 1.0em; /* large value to make sure this remains circular */
+	-fx-padding: 0.333333em; /* 4 -- radius of the inner black dot when selected */
+	/*-fx-shape: "M927.936 272.992l-68.288-68.288c-12.608-12.576-32.96-12.576-45.536 0l-409.44 409.44-194.752-196.16c-12.576-12.576-32.928-12.576-45.536 0l-68.288 68.288c-12.576 12.608-12.576 32.96 0 45.536l285.568 287.488c12.576 12.576 32.96 12.576 45.536 0l500.736-500.768c12.576-12.544 12.576-32.96 0-45.536z";*/
+	-fx-background-insets: 3 2 1 2;
+}
+.radio-button:selected > .radio,.radio-button:hover > .radio {
+	-fx-fill-color: #56c0e0;
+}
+.radio-button:pressed > .radio {
+	-fx-background-color: #50c0e2;
+}
+.radio-button:selected > .radio > .dot {
+	-fx-background-color: #56c0e0;
+}
+
+/*common things*/
+.check-box:hover > .box,
+.check-box:selected > .box,
+.radio-button:hover > .radio,
+.radio-button:selected > .radio {
+	-fx-background-color: linear-gradient(to bottom, white, #efefef);
+
+}
+
+.check-box:pressed > .box,
+.radio-button:pressed > .radio {
+	-fx-background-color: #50c0e2;
+
+}

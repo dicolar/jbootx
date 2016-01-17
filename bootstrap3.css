@@ -476,7 +476,7 @@ VBox > .split-menu-button.last > .arrow-button {
 }
 
 .scroll-bar {
-	-fx-background-color: transparent;
+	-fx-background-color: #fafafa;
 	-fx-background-radius: 0;
 	-fx-block-increment: 50;
 }

@@ -900,3 +900,26 @@ VBox > .split-menu-button.last > .arrow-button {
 .radio-button:pressed > .radio {
 	-fx-background-color: #0087cb;
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Slider                                                                      *
+ *                                                                             *
+ ******************************************************************************/
+
+.slider .thumb {
+	-fx-background-color: #dad9da, white, #3fbadf;
+	-fx-background-insets: 0, 1, 5;
+	-fx-effect: dropshadow(two-pass-box , rgba(0, 0, 0, 0.2), 5, 0.0 , 0, 0);
+}
+.slider .thumb:hover {
+	-fx-effect: dropshadow(two-pass-box , rgba(0, 0, 0, 0.4), 5, 0.0 , 0, 0);
+}
+.slider .track {
+	-fx-background-color: #dad9da, white;
+	-fx-background-insets: -1, 0, 1;
+	-fx-pref-height: 5;
+}
+.slider:vertical .track {
+	-fx-pref-width: 5;
+}

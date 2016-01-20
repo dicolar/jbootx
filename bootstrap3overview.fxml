@@ -229,6 +229,7 @@
                         <TextField prefWidth="50.0" promptText=".last" styleClass="last" />
                      </items>
                   </ToolBar>
+                  <Slider orientation="VERTICAL" value="70.0" />
                   <ToolBar prefHeight="44.0" prefWidth="300.0">
                      <items>
                         <TextField prefWidth="100.0" />
@@ -506,6 +507,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </TextField>
+                  <Slider value="80.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

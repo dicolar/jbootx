@@ -443,6 +443,9 @@ VBox > .split-menu-button.last > .arrow-button {
 .tab-pane .tab-header-area .tab:hover {
 	-fx-background-color: #eeeeee;
 }
+.tab-pane .tab-header-area .tab:disabled:hover {
+	-fx-background-color: transparent;
+}
 
 .tab-pane .tab-header-area .tab:selected {
 	-fx-focus-color: transparent;

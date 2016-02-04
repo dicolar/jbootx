@@ -15,13 +15,8 @@
             <HBox prefHeight="39.0" spacing="5.0">
                <children>
                   <Button mnemonicParsing="false" styleClass="default" text="default" />
-                  <Button mnemonicParsing="false" style="-fx-background-insets: 0,0,-1,0;" styleClass="primary" text=".primary" />
-                  <Button mnemonicParsing="false" text=".success">
-                     <styleClass>
-                        <String fx:value="success" />
-                        <String fx:value="btn" />
-                     </styleClass>
-                  </Button>
+                  <Button mnemonicParsing="false" styleClass="success" text=".success" />
+                  <Button mnemonicParsing="false" styleClass="primary" text=".primary" />
                   <Button mnemonicParsing="false" text=".info">
                      <styleClass>
                         <String fx:value="info" />
@@ -767,7 +762,7 @@
                   </TabPane>
                </children>
             </HBox>
-            <ProgressBar prefHeight="20.0" prefWidth="600.0" progress="0.86" />
+            <ProgressBar prefHeight="10.0" prefWidth="600.0" progress="0.86" />
             <Label text=".success" />
             <ProgressBar prefHeight="20.0" prefWidth="600.0" progress="0.69" styleClass="success" />
             <Label text=".info" />

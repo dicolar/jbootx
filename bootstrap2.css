@@ -136,8 +136,11 @@ VBox > .split-menu-button.last > .arrow-button {
 }
 
 /*button styles*/
-
-/*default button settings*/
+/*highlight line on the top*/
+.button,.split-menu-button,.toggle-button,.menu-button,
+.split-menu-button > .label, .split-menu-button > .arrow-button {
+	-fx-background-insets: 0,2 0 0 0;
+}
 
 /*bgcolor setting*/
 .color-picker,.date-picker > .arrow-button,
@@ -145,7 +148,7 @@ VBox > .split-menu-button.last > .arrow-button {
 .button,.split-menu-button,.toggle-button,.menu-button,
 .combo-box,.choice-box,
 .font-menu-button, .split-menu-button > .label, .split-menu-button > .arrow-button {
-	-fx-background-color: linear-gradient(to bottom,#fff,#e6e6e6);
+	-fx-background-color: white,linear-gradient(to bottom,#fff,#e6e6e6);
 }
 
 .color-picker,.date-picker > .arrow-button,
@@ -197,7 +200,7 @@ VBox > .split-menu-button.last > .arrow-button {
 /*primary*/
 .button.primary,.split-menu-button.primary,.toggle-button.primary,.menu-button.primary,
 .split-menu-button.primary > .label, .split-menu-button.primary > .arrow-button {
-	-fx-background-color: linear-gradient(to bottom,#08c,#04c);
+	-fx-background-color: #339fd6,linear-gradient(to bottom,#08c,#04c);
 }
 
 .button.primary,.menu-button.primary,.toggle-button.primary,
@@ -209,7 +212,7 @@ VBox > .split-menu-button.last > .arrow-button {
 .button.primary:hover,.menu-button.primary:hover,.toggle-button.primary:hover,
 .split-menu-button.primary > .label:hover, .split-menu-button.primary > .arrow-button:hover {
 	-fx-border-color: #005bb8 #005bb8 #003399 #005bb8;
-	-fx-background-color: linear-gradient(to bottom, #0060cc, #0044cc);
+	-fx-background-color: #3381d6,linear-gradient(to bottom, #0060cc, #0044cc);
 }
 /*pressed selected*/
 .button.primary:pressed, .button.primary:selected,
@@ -225,7 +228,7 @@ VBox > .split-menu-button.last > .arrow-button {
 
 .button.success,.split-menu-button.success,.toggle-button.success,.menu-button.success,
 .split-menu-button.success > .label, .split-menu-button.success > .arrow-button {
-	-fx-background-color: linear-gradient(to bottom,#62c462,#51a351);
+	-fx-background-color: #81cf81,linear-gradient(to bottom,#62c462,#51a351);
 }
 
 .button.success,.menu-button.success,.toggle-button.success,
@@ -237,7 +240,7 @@ VBox > .split-menu-button.last > .arrow-button {
 .button.success:hover,.menu-button.success:hover,.toggle-button.success:hover,
 .split-menu-button.success > .label:hover, .split-menu-button.success > .arrow-button:hover {
 	-fx-border-color: #50a150 #50a150 #3d7a3d #50a150;
-	-fx-background-color: linear-gradient(to bottom, #5ab25a, #3d7a3d);
+	-fx-background-color: #79c279,linear-gradient(to bottom, #5ab25a, #3d7a3d);
 }
 /*pressed selected*/
 .button.success:pressed, .button.success:selected,
@@ -253,7 +256,7 @@ VBox > .split-menu-button.last > .arrow-button {
 
 .button.info,.split-menu-button.info,.toggle-button.info,.menu-button.info,
 .split-menu-button.info > .label, .split-menu-button.info > .arrow-button {
-	-fx-background-color: linear-gradient(to bottom,#5bc0de,#2f96b4);
+	-fx-background-color: #7ccde5,linear-gradient(to bottom,#5bc0de,#2f96b4);
 }
 
 .button.info,.menu-button.info,.toggle-button.info,
@@ -265,7 +268,7 @@ VBox > .split-menu-button.last > .arrow-button {
 .button.info:hover,.menu-button.info:hover,.toggle-button.info:hover,
 .split-menu-button.info > .label:hover, .split-menu-button.info > .arrow-button:hover {
 	-fx-border-color: #3d99b4 #3d99b4 #237187 #3d99b4;
-	-fx-background-color: linear-gradient(to bottom, #41a8c6, #2f96b4);
+	-fx-background-color: #69bad2,linear-gradient(to bottom, #41a8c6, #2f96b4);
 }
 /*pressed selected*/
 .button.info:pressed, .button.info:selected,
@@ -281,7 +284,7 @@ VBox > .split-menu-button.last > .arrow-button {
 
 .button.warning,.split-menu-button.warning,.toggle-button.warning,.menu-button.warning,
 .split-menu-button.warning > .label, .split-menu-button.warning > .arrow-button {
-	-fx-background-color: linear-gradient(to bottom,#fbb450,#f89406);
+	-fx-background-color: #fcc272,linear-gradient(to bottom,#fbb450,#f89406);
 }
 
 .button.warning,.menu-button.warning,.toggle-button.warning,
@@ -293,7 +296,7 @@ VBox > .split-menu-button.last > .arrow-button {
 .button.warning:hover,.menu-button.warning:hover,.toggle-button.warning:hover,
 .split-menu-button.warning > .label:hover, .split-menu-button.warning > .arrow-button:hover {
 	-fx-border-color: #e09325 #e09325 #ba6f04 #e09325;
-	-fx-background-color: linear-gradient(to bottom, #f9a123, #f89406);
+	-fx-background-color: #fab552,linear-gradient(to bottom, #f9a123, #f89406);
 }
 /*pressed selected*/
 .button.warning:pressed, .button.warning:selected,
@@ -309,7 +312,7 @@ VBox > .split-menu-button.last > .arrow-button {
 
 .button.danger,.split-menu-button.danger,.toggle-button.danger,.menu-button.danger,
 .split-menu-button.danger > .label, .split-menu-button.danger > .arrow-button {
-	-fx-background-color: linear-gradient(to bottom,#ee5f5b,#bd362f);
+	-fx-background-color: #f17e7b,linear-gradient(to bottom,#ee5f5b,#bd362f);
 }
 
 .button.danger,.menu-button.danger,.toggle-button.danger,
@@ -321,7 +324,7 @@ VBox > .split-menu-button.last > .arrow-button {
 .button.danger:hover,.menu-button.danger:hover,.toggle-button.danger:hover,
 .split-menu-button.danger > .label:hover, .split-menu-button.danger > .arrow-button:hover {
 	-fx-border-color: #bf423d #bf423d #8e2823 #bf423d;
-	-fx-background-color: linear-gradient(to bottom, #d14741, #bd362f);
+	-fx-background-color: #dc6d69,linear-gradient(to bottom, #d14741, #bd362f);
 }
 /*pressed selected*/
 .button.danger:pressed, .button.danger:selected,

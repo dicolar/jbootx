@@ -12,9 +12,9 @@ do not switch to the *`caspian`* theme!
 best experience in `Java8` environment
 
 ##Bootstrap3
-![](src/main/resources/images/bootstrap3-1.png)
-![](src/main/resources/images/bootstrap3-2.png)
-![](src/main/resources/images/bootstrap3-3.png)
+![](images/bootstrap3-1.png)
+![](images/bootstrap3-2.png)
+![](images/bootstrap3-3.png)
 
 it's very easy to use! that means,no java code is required!
 
@@ -29,9 +29,9 @@ scene.getStylesheets().add(Main.class.getResource("bootstrap3.css").toExternalFo
 -------
 ##Good news!bootstrap2 is also available!
 ##Bootstrap2
-![](src/main/resources/images/bootstrap2-1.png)
-![](src/main/resources/images/bootstrap2-2.png)
-![](src/main/resources/images/bootstrap2-3.png)
+![](images/bootstrap2-1.png)
+![](images/bootstrap2-2.png)
+![](images/bootstrap2-3.png)
 
 ###import `bootstrap2.css` file to your project
 ~~~

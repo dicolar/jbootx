@@ -26,8 +26,7 @@ Open the `bootstrap3overview.fxml` in your `Scene Builder` and learn how to use 
 
 
 -------
-##Good news!bootstrap2 is also available!
-##Bootstrap2
+##Good news! Bootstrap2 is also available!
 ![](images/bootstrap2-1.png)
 ![](images/bootstrap2-2.png)
 ![](images/bootstrap2-3.png)

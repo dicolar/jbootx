@@ -7,7 +7,8 @@
 <?import javafx.scene.web.HTMLEditor?>
 <?import java.lang.*?>
 <ScrollPane prefHeight="3000.0" prefViewportHeight="600.0" prefViewportWidth="800.0" prefWidth="1000.0"
-            style="-fx-background-color: white;" stylesheets="@bootstrap2.css" xmlns="http://javafx.com/javafx/8"
+            fx:controller="org.alfalfa.fx.controller.OverviewController"
+            style="-fx-background-color: white;" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1">
     <contextMenu>
         <ContextMenu>
@@ -32,8 +33,14 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
             <Button mnemonicParsing="false" styleClass="default" text="default"/>
-            <Button mnemonicParsing="false" styleClass="success" text=".success"/>
-            <Button mnemonicParsing="false" styleClass="primary" text=".primary"/>
+            <Button mnemonicParsing="false" style="-fx-background-insets: 0,0,-1,0;" styleClass="primary"
+                    text=".primary"/>
+            <Button mnemonicParsing="false" text=".success">
+                <styleClass>
+                    <String fx:value="success"/>
+                    <String fx:value="btn"/>
+                </styleClass>
+            </Button>
             <Button mnemonicParsing="false" text=".info">
                 <styleClass>
                     <String fx:value="info"/>
@@ -229,6 +236,7 @@
                 <TextArea prefHeight="50.0" prefWidth="50.0" promptText=".middle" styleClass="middle"/>
                 <TextField prefWidth="50.0" promptText=".last" styleClass="last"/>
             </ToolBar>
+            <Slider orientation="VERTICAL" value="70.0"/>
             <ToolBar prefHeight="44.0" prefWidth="300.0">
                 <TextField prefWidth="100.0"/>
                 <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="1.0"/>
@@ -497,6 +505,7 @@
                     <Insets left="10.0"/>
                 </HBox.margin>
             </TextField>
+            <Slider value="80.0"/>
         </HBox>
         <HBox prefHeight="79.0">
             <padding>
@@ -675,7 +684,7 @@
                 </Tab>
             </TabPane>
         </HBox>
-        <ProgressBar prefHeight="10.0" prefWidth="600.0" progress="0.86"/>
+        <ProgressBar prefHeight="20.0" prefWidth="600.0" progress="0.86"/>
         <Label text=".success"/>
         <ProgressBar prefHeight="20.0" prefWidth="600.0" progress="0.69" styleClass="success"/>
         <Label text=".info"/>

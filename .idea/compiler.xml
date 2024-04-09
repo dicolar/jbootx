@@ -9,8 +9,5 @@
         <module name="jbootx" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="jbootx" target="1.5" />
-    </bytecodeTargetLevel>
   </component>
 </project>

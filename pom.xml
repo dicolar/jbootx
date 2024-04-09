@@ -6,7 +6,7 @@
 
     <groupId>org.alfalfa.fx</groupId>
     <artifactId>jbootx</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOP</version>
     <properties>
         <java.version>21</java.version>
         <javafx.version>22-ea+16</javafx.version>

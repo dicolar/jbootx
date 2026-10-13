@@ -1,0 +1,674 @@
+<title>初音未来骑单车</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;700&display=swap">
+<style>
+/* Layout: one centered stage; the animated canvas is the hero, a slim control strip sits under it */
+:root {
+  --bg: #edf6f5;
+  --surface: #ffffff;
+  --fg: #163634;
+  --muted: #56716f;
+  --accent: #11857b;
+  --accent-2: #d93d77;
+  --line: #cfe2df;
+  --font-display: "ZCOOL KuaiLe", "Noto Sans SC", system-ui, sans-serif;
+  --font-body: "Noto Sans SC", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1b1b; --surface: #152829; --fg: #e2f3f1; --muted: #94b3b0;
+    --accent: #46d4c8; --accent-2: #ff7eab; --line: #28403f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1b1b; --surface: #152829; --fg: #e2f3f1; --muted: #94b3b0;
+  --accent: #46d4c8; --accent-2: #ff7eab; --line: #28403f; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 28px; display: grid; gap: 14px; }
+header { display: flex; align-items: baseline; justify-content: space-between; gap: 6px 16px; flex-wrap: wrap; }
+h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 4vw, 38px); margin: 0; letter-spacing: 0.02em; text-wrap: balance; }
+h1 span { color: var(--accent); }
+.sub { color: var(--muted); margin: 0; font-size: 14px; line-height: 1.6; max-width: 46ch; }
+.stage { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+canvas { display: block; width: 100%; max-width: 100%; aspect-ratio: 10 / 7; height: auto; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+.speed { display: flex; align-items: center; gap: 10px; flex: 1 1 260px; min-width: 0; }
+.speed label { font-weight: 700; white-space: nowrap; }
+.speed input { flex: 1; min-width: 0; accent-color: var(--accent); }
+output { font-variant-numeric: tabular-nums; min-width: 5.5em; color: var(--muted); }
+.btns { display: flex; gap: 10px; flex-wrap: wrap; }
+button { font: inherit; font-weight: 700; border-radius: 999px; padding: 8px 18px; border: 1.5px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; }
+button.primary { background: var(--accent); color: var(--bg); }
+button:hover { filter: brightness(1.08); }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>初音未来<span>骑单车</span></h1>
+    <p class="sub">拖动车速，双马尾、鬓发和裙摆会跟着风变；车速调到 0，头发会自然垂下来。</p>
+  </header>
+  <div class="stage">
+    <canvas id="scene" role="img" aria-label="初音未来骑着白色自行车在樱花路上前进，车篮里插着一根大葱，青色双马尾随风飘动"></canvas>
+  </div>
+  <div class="controls">
+    <div class="speed">
+      <label for="speed">车速</label>
+      <input id="speed" type="range" min="0" max="16" step="0.5" value="8">
+      <output id="speedOut" for="speed">5.5 km/h</output>
+    </div>
+    <div class="btns">
+      <button id="bell" type="button" class="primary">按铃</button>
+      <button id="pause" type="button">暂停</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const W = 1000, H = 700;
+  const cv = document.getElementById('scene');
+  const ctx = cv.getContext('2d');
+  let S = 1;
+
+  // ------------------------------------------------------------ vectors
+  const V = (x, y) => ({ x, y });
+  const add = (a, b) => V(a.x + b.x, a.y + b.y);
+  const sub = (a, b) => V(a.x - b.x, a.y - b.y);
+  const mul = (a, k) => V(a.x * k, a.y * k);
+  const len = a => Math.hypot(a.x, a.y);
+  const norm = a => { const l = len(a) || 1e-6; return V(a.x / l, a.y / l); };
+  const perp = a => V(-a.y, a.x);
+  const lerp = (a, b, t) => V(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
+  const rot = (a, r) => V(a.x * Math.cos(r) - a.y * Math.sin(r), a.x * Math.sin(r) + a.y * Math.cos(r));
+  const ss = x => { x = Math.min(Math.max(x, 0), 1); return x * x * (3 - 2 * x); };
+  const DEG = Math.PI / 180;
+
+  function solveJoint(a, b, l1, l2, pick) {
+    let d = len(sub(b, a));
+    d = Math.min(Math.max(d, Math.abs(l1 - l2) + 0.01), l1 + l2 - 0.01);
+    const x = (l1 * l1 - l2 * l2 + d * d) / (2 * d);
+    const h = Math.sqrt(Math.max(l1 * l1 - x * x, 0));
+    const u = norm(sub(b, a)), n = perp(u), base = add(a, mul(u, x));
+    return pick(add(base, mul(n, h)), sub(base, mul(n, h)));
+  }
+
+  // ------------------------------------------------------------ drawing helpers
+  const cache = new Map();
+  const P = d => { let p = cache.get(d); if (!p) { p = new Path2D(d); cache.set(d, p); } return p; };
+  const fill = (path, color, alpha = 1) => { ctx.globalAlpha = alpha; ctx.fillStyle = color; ctx.fill(typeof path === 'string' ? P(path) : path); ctx.globalAlpha = 1; };
+  const stroke = (path, color, lw, alpha = 1) => {
+    ctx.globalAlpha = alpha; ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.stroke(typeof path === 'string' ? P(path) : path); ctx.globalAlpha = 1;
+  };
+  const line = (a, b, color, lw, alpha = 1) => { const p = new Path2D(); p.moveTo(a.x, a.y); p.lineTo(b.x, b.y); stroke(p, color, lw, alpha); };
+  const circle = (x, y, r) => { const p = new Path2D(); p.arc(x, y, r, 0, Math.PI * 2); return p; };
+  const ellipse = (x, y, rx, ry) => { const p = new Path2D(); p.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); return p; };
+  function rrect(x, y, w, h, r) {
+    const p = new Path2D();
+    p.moveTo(x + r, y); p.arcTo(x + w, y, x + w, y + h, r); p.arcTo(x + w, y + h, x, y + h, r);
+    p.arcTo(x, y + h, x, y, r); p.arcTo(x, y, x + w, y, r); p.closePath(); return p;
+  }
+  function capsule(p1, p2, r1, r2) {
+    const d = sub(p2, p1), phi = Math.atan2(d.y, d.x), n = perp(norm(d)), p = new Path2D();
+    p.moveTo(p1.x + n.x * r1, p1.y + n.y * r1);
+    p.lineTo(p2.x + n.x * r2, p2.y + n.y * r2);
+    p.arc(p2.x, p2.y, r2, phi + Math.PI / 2, phi - Math.PI / 2, true);
+    p.lineTo(p1.x - n.x * r1, p1.y - n.y * r1);
+    p.arc(p1.x, p1.y, r1, phi - Math.PI / 2, phi + Math.PI / 2, true);
+    p.closePath(); return p;
+  }
+  function band(p1, p2, r1, r2) {
+    const n = perp(norm(sub(p2, p1))), p = new Path2D();
+    p.moveTo(p1.x + n.x * r1, p1.y + n.y * r1); p.lineTo(p2.x + n.x * r2, p2.y + n.y * r2);
+    p.lineTo(p2.x - n.x * r2, p2.y - n.y * r2); p.lineTo(p1.x - n.x * r1, p1.y - n.y * r1); p.closePath(); return p;
+  }
+
+  // ------------------------------------------------------------ palette
+  const SKIN = '#ffe6d8', SKIN_SH = '#f4c7b4', SKIN_FAR = '#e3b39f';
+  const HAIR = '#3cc8bd', HAIR_L = '#8ae6dc', HAIR_D = '#22a399', HAIR_DD = '#147a72';
+  const SHIRT = '#dfe3e8', SHIRT_SH = '#b8bec7';
+  const BLK = '#2a2b31', BLK_FAR = '#1b1c20', BLK_HI = '#4a4c56';
+  const TEAL = '#2fc6b8', PINK = '#ff5c93';
+
+  // ------------------------------------------------------------ rig (scene units, 1000 x 700)
+  const GROUND = 622;
+  const RW = V(300, 510), FW = V(690, 510), R = 104;
+  const BB = V(470, 522), CRANK = 46, GEAR = 1.5;
+  const SEAT = V(424, 352), SEAT_TOP = V(436, 388);
+  const HEAD_TOP = V(642, 350), HEAD_BOT = V(655, 402), STEM = V(632, 294);
+  const GRIP_N = V(598, 300), GRIP_F = V(606, 294);
+  const HIP_N = V(420, 334), HIP_F = V(414, 336);
+  const THIGH = 120, SHIN = 116, UPPER = 98, FORE = 94;
+  const SH_N0 = V(446, 200), SH_F0 = V(440, 196);
+  const HEAD0 = V(482, 102);
+  const TIE_R = V(-40, -32), TIE_L = V(39, -36);
+  const pickFwd = (a, b) => (a.x > b.x ? a : b);
+  const pickDown = (a, b) => (a.y > b.y ? a : b);
+
+  // ------------------------------------------------------------ state
+  const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const speedInput = document.getElementById('speed');
+  const speedOut = document.getElementById('speedOut');
+  let target = +speedInput.value, speed = target;
+  let dist = 0, phase = 0, clock = 0;
+  let paused = reduceMotion;
+  let blinkIn = 120, blinkFor = 0, bellShake = 0, humIn = 40;
+  const notes = [];
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const petals = Array.from({ length: 16 }, () => ({ x: rand(0, 1100), y: rand(0, 600), r: rand(0, 6), spin: rand(-0.06, 0.06), ph: rand(0, 6), s: rand(0.7, 1.2) }));
+  const streaks = Array.from({ length: 8 }, () => ({ x: rand(0, 1200), y: rand(230, 520), l: rand(60, 150) }));
+
+  // ------------------------------------------------------------ hair physics (verlet ropes)
+  function makeRope(n, seg) { return { n, seg, p: Array.from({ length: n }, () => ({ x: 0, y: 0, px: 0, py: 0 })) }; }
+  const ropeA = makeRope(22, 20); // from her right tie (screen left)
+  const ropeB = makeRope(22, 20); // from her left tie, arcs over the head
+  function seedRope(r, a, dir) {
+    r.p.forEach((q, i) => { q.x = q.px = a.x + dir.x * r.seg * i; q.y = q.py = a.y + dir.y * r.seg * i; });
+  }
+  const K = 0.1, G = 0.22;
+  function stepRope(r, a, dir, lift, ph) {
+    const pts = r.p;
+    pts[0].x = pts[0].px = a.x; pts[0].y = pts[0].py = a.y;
+    for (let i = 1; i < r.n; i++) {
+      const q = pts[i], vx = q.x - q.px, vy = q.y - q.py, f = i / (r.n - 1);
+      const wind = -speed * (0.9 + 0.2 * f);
+      const turb = speed * (0.22 * Math.sin(phase * 1.3 + ph - i * 0.55) + 0.08 * Math.sin(phase * 2.9 + ph - i * 1.1));
+      q.px = q.x; q.py = q.y;
+      q.x += vx * 0.99 + K * (wind - vx);
+      q.y += vy * 0.99 + G - lift * speed + K * (turb - vy);
+    }
+    for (let it = 0; it < 10; it++) {
+      pts[1].x = a.x + dir.x * r.seg; pts[1].y = a.y + dir.y * r.seg;
+      for (let i = 2; i < r.n; i++) {
+        const A = pts[i - 1], B = pts[i];
+        const dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy) || 1e-6, diff = (d - r.seg) / d;
+        if (i === 2) { B.x -= dx * diff; B.y -= dy * diff; }
+        else { A.x += dx * diff * 0.5; A.y += dy * diff * 0.5; B.x -= dx * diff * 0.5; B.y -= dy * diff * 0.5; }
+      }
+    }
+  }
+  function smooth(pts, sub = 4) {
+    const out = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(i - 1, 0)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(i + 2, pts.length - 1)];
+      for (let k = 0; k < sub; k++) {
+        const t = k / sub, t2 = t * t, t3 = t2 * t;
+        out.push(V(
+          0.5 * (2 * p1.x + (-p0.x + p2.x) * t + (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 + (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3),
+          0.5 * (2 * p1.y + (-p0.y + p2.y) * t + (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 + (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3)));
+      }
+    }
+    out.push(V(pts[pts.length - 1].x, pts[pts.length - 1].y));
+    return out;
+  }
+  function tailWidth(root, mid, s) {
+    const tip = 0.62;
+    if (s < 0.12) return root + (mid - root) * ss(s / 0.12);
+    if (s < tip) return mid + 4 * Math.sin((s - 0.12) / (tip - 0.12) * Math.PI);
+    return mid * Math.pow(1 - ss((s - tip) / (1 - tip)), 0.8);
+  }
+  function drawTail(r, root, mid, stops, strands) {
+    const c = smooth(r.p), N = c.length, L = [], Rr = [], normals = [];
+    for (let i = 0; i < N; i++) {
+      const n = perp(norm(sub(c[Math.min(i + 1, N - 1)], c[Math.max(i - 1, 0)])));
+      normals.push(n);
+      const w = tailWidth(root, mid, i / (N - 1));
+      L.push(add(c[i], mul(n, w))); Rr.push(sub(c[i], mul(n, w)));
+    }
+    const path = new Path2D();
+    path.moveTo(L[0].x, L[0].y);
+    L.forEach(p => path.lineTo(p.x, p.y));
+    for (let i = N - 1; i >= 0; i--) path.lineTo(Rr[i].x, Rr[i].y);
+    path.closePath();
+    const g = ctx.createLinearGradient(c[N - 1].x, c[N - 1].y, c[0].x, c[0].y);
+    stops.forEach(([o, col]) => g.addColorStop(o, col));
+    fill(path, g);
+    stroke(path, HAIR_DD, 1.2, 0.35);
+    for (const [k, s0, s1, col, lw] of strands) {
+      const sp = new Path2D(); let first = true;
+      for (let i = 0; i < N; i++) {
+        const s = i / (N - 1); if (s < s0 || s > s1) continue;
+        const q = add(c[i], mul(normals[i], tailWidth(root, mid, s) * k));
+        if (first) { sp.moveTo(q.x, q.y); first = false; } else sp.lineTo(q.x, q.y);
+      }
+      stroke(sp, col, lw, 0.75);
+    }
+  }
+
+  // ------------------------------------------------------------ pose for the current frame
+  function pose() {
+    const theta = -35 * DEG + dist / R / GEAR;
+    const bob = 1.2 * Math.sin(2 * theta);
+    const headAng = (-3 + 1.2 * Math.sin(theta)) * DEG;
+    const pedN = add(BB, V(CRANK * Math.cos(theta), CRANK * Math.sin(theta)));
+    const pedF = sub(BB, V(CRANK * Math.cos(theta), CRANK * Math.sin(theta)));
+    const footN = 12 + 10 * Math.sin(theta), footF = 12 + 10 * Math.sin(theta + Math.PI);
+    const ball = V(24, 21);
+    const ankN = sub(pedN, rot(ball, footN * DEG)), ankF = sub(pedF, rot(ball, footF * DEG));
+    const kneeN = solveJoint(HIP_N, ankN, THIGH, SHIN, pickFwd);
+    const kneeF = solveJoint(HIP_F, ankF, THIGH, SHIN, pickFwd);
+    const shN = add(SH_N0, V(0, bob)), shF = add(SH_F0, V(0, bob));
+    const wrN = add(GRIP_N, V(-6, -2)), wrF = add(GRIP_F, V(-6, -2));
+    const elbN = solveJoint(shN, wrN, UPPER, FORE, pickDown);
+    const elbF = solveJoint(shF, wrF, UPPER, FORE, pickDown);
+    const head = add(HEAD0, V(0, bob));
+    return { theta, bob, headAng, pedN, pedF, footN, footF, ankN, ankF, kneeN, kneeF, shN, shF, elbN, elbF, wrN, wrF, head };
+  }
+  const ties = pz => ({
+    a: add(pz.head, rot(TIE_R, pz.headAng)), b: add(pz.head, rot(TIE_L, pz.headAng)),
+  });
+  // root directions: hanging behind her back when still, streaming back in the wind;
+  // the far tail (her left) passes behind the head and rides a little higher
+  const windMix = () => Math.min(Math.max(speed / 4, 0), 1);
+  const dirA = () => norm(lerp(V(-0.35, 1), V(-1, 0.25), windMix()));
+  const dirB = () => norm(lerp(V(-0.2, 1), V(-1, -0.35), windMix()));
+
+  // ------------------------------------------------------------ background
+  function background() {
+    const sky = ctx.createLinearGradient(0, 0, 0, 600);
+    sky.addColorStop(0, '#9ee3f0'); sky.addColorStop(0.7, '#dff6f7'); sky.addColorStop(1, '#f6fcfb');
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+    fill(circle(850, 105, 70), '#fff6c8', 0.35); fill(circle(850, 105, 52), '#fff6c8');
+    [[170, 80, 1], [620, 60, 0.8], [930, 200, 0.7]].forEach(([cx, cy, s]) => {
+      const x = ((cx - dist * 0.04) % 1300 + 1300) % 1300 - 150;
+      ctx.save(); ctx.translate(x, cy); ctx.scale(s, s);
+      fill(ellipse(0, 0, 70, 20), '#fff', 0.92); fill(ellipse(-22, -14, 34, 22), '#fff', 0.92); fill(ellipse(20, -18, 38, 26), '#fff', 0.92);
+      ctx.restore();
+    });
+    const hills = (base, a1, f1, a2, f2, o, col) => {
+      const p = new Path2D(); p.moveTo(0, 600);
+      for (let x = 0; x <= W; x += 10) p.lineTo(x, base - a1 * Math.sin((x + o) * f1) - a2 * Math.sin((x + o) * f2 + 1.3));
+      p.lineTo(W, 600); p.closePath(); fill(p, col);
+    };
+    hills(512, 30, 0.005, 18, 0.012, dist * 0.12, '#c4ecdc');
+    hills(560, 16, 0.008, 10, 0.017, dist * 0.25, '#a5dcbf');
+    const o = dist * 0.4, sp = 210, i0 = Math.floor(o / sp);
+    for (let i = i0 - 1; i < i0 + 7; i++) {
+      const h = Math.abs(Math.sin(i * 12.9898) * 43758.5453) % 1;
+      const x = i * sp - o + 60, y = 548 + h * 12, s = 0.7 + h * 0.35;
+      ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+      fill(rrect(-5, -10, 10, 45, 2), '#b58b6b');
+      fill(circle(0, -38, 34), '#ffc2d6'); fill(circle(-20, -22, 22), '#ffb0c9'); fill(circle(22, -26, 22), '#ffd3e1');
+      ctx.restore();
+    }
+    ctx.fillStyle = '#8fd17a'; ctx.fillRect(0, 592, W, 16);
+    const road = ctx.createLinearGradient(0, 606, 0, 700);
+    road.addColorStop(0, '#a7adb5'); road.addColorStop(1, '#8b9199');
+    ctx.fillStyle = road; ctx.fillRect(0, 606, W, 94);
+    ctx.fillStyle = '#c9ced4'; ctx.fillRect(0, 606, W, 5);
+    ctx.fillStyle = '#f4f6f7';
+    for (let x = -(dist % 90); x < W; x += 90) ctx.fillRect(x, 663, 50, 6);
+    const a = Math.min(Math.max((speed - 3) / 8, 0), 1) * 0.85;
+    if (a > 0) streaks.forEach(s => line(V(s.x, s.y), V(s.x + s.l, s.y), '#ffffff', 4, a));
+    ctx.globalAlpha = 0.18; fill(ellipse(495, GROUND + 2, 270, 10), '#3d4148'); ctx.globalAlpha = 1;
+  }
+
+  // ------------------------------------------------------------ bike
+  function wheel(c, ang) {
+    ctx.save(); ctx.translate(c.x, c.y);
+    stroke(circle(0, 0, R), '#2b2c31', 12);
+    stroke(circle(0, 0, R - 2), '#45474f', 2);
+    stroke(circle(0, 0, R - 9), '#d7dde3', 4);
+    ctx.rotate(ang);
+    const sp = new Path2D();
+    for (let k = 0; k < 12; k++) {
+      const a = (k * 30 + (k % 2 ? 7 : 0)) * DEG;
+      sp.moveTo(0, 0); sp.lineTo(Math.cos(a) * (R - 10), Math.sin(a) * (R - 10));
+    }
+    stroke(sp, '#a4abb3', 1.5);
+    fill(circle(R - 22, 0, 4), TEAL);
+    fill(circle(0, 0, 11), '#c9d0d7'); fill(circle(0, 0, 5), '#6b7078');
+    ctx.restore();
+  }
+  function arcPath(c, r, a0, a1) { const p = new Path2D(); p.arc(c.x, c.y, r, a0 * DEG, a1 * DEG); return p; }
+  function tube(d, w) { stroke(d, '#b8c4ce', w + 3); stroke(d, '#ffffff', w); }
+
+  function bikeBack(pz) {
+    wheel(RW, dist / R); wheel(FW, dist / R);
+    stroke(arcPath(RW, R + 14, 195, 320), '#b8c4ce', 12); stroke(arcPath(RW, R + 14, 195, 320), '#ffffff', 9);
+    stroke(arcPath(FW, R + 14, 215, 340), '#b8c4ce', 12); stroke(arcPath(FW, R + 14, 215, 340), '#ffffff', 9);
+    tube(`M${BB.x},${BB.y} L${RW.x},${RW.y}`, 8);
+    tube(`M${SEAT_TOP.x},${SEAT_TOP.y} L${RW.x},${RW.y}`, 7);
+    // drivetrain
+    stroke(circle(BB.x, BB.y, 27), '#8e949c', 5);
+    const spider = new Path2D();
+    for (let k = 0; k < 5; k++) { const a = pz.theta + k * Math.PI * 2 / 5; spider.moveTo(BB.x, BB.y); spider.lineTo(BB.x + Math.cos(a) * 24, BB.y + Math.sin(a) * 24); }
+    stroke(spider, '#a0a6ad', 3);
+    stroke(circle(RW.x, RW.y, 12), '#8e949c', 4);
+    stroke(`M${BB.x},${BB.y - 27} L${RW.x},${RW.y - 12} M${BB.x},${BB.y + 27} L${RW.x},${RW.y + 12}`, '#6d737b', 2.5);
+    // step-through frame
+    tube(`M${BB.x},${BB.y} L${SEAT_TOP.x},${SEAT_TOP.y}`, 12);
+    tube(`M652,390 C600,430 520,470 ${BB.x},${BB.y}`, 15);
+    tube(`M642,368 C590,400 500,430 448,448`, 10);
+    stroke('M560,440 L604,415', TEAL, 4);
+    stroke(`M655,398 Q678,450 ${FW.x},${FW.y}`, '#d6dde4', 9);
+    stroke(`M${HEAD_TOP.x},${HEAD_TOP.y} L${HEAD_BOT.x},${HEAD_BOT.y}`, TEAL, 15);
+    stroke(`M${SEAT_TOP.x},${SEAT_TOP.y} L426,360`, '#bfc6ce', 7);
+    fill('M388,354 Q394,340 428,344 Q454,346 458,354 Q424,368 388,354 Z', '#5a3e36');
+    stroke(`M${HEAD_TOP.x},${HEAD_TOP.y} L${STEM.x},${STEM.y}`, '#bfc6ce', 7);
+    stroke(`M${STEM.x},${STEM.y} C644,286 626,284 ${GRIP_F.x},${GRIP_F.y}`, '#aeb6bf', 5);
+    // basket + leek
+    fill('M658,322 L740,316 L730,384 L668,388 Z', '#f3dfb6');
+    stroke('M658,322 L740,316 L730,384 L668,388 Z', '#b78d55', 3);
+    stroke('M672,320 L680,386 M688,320 L693,386 M704,320 L706,386 M720,320 L719,386 M661,342 L737,337 M664,364 L733,360', '#c9a06a', 2);
+    stroke('M656,322 L742,315', '#a37a46', 5);
+    stroke('M690,318 C700,280 712,250 728,226', '#ffffff', 15);
+    ctx.save(); ctx.translate(4, 0); stroke('M690,318 C700,280 712,250 728,226', '#e7efe3', 4); ctx.restore();
+    const sway = Math.sin(phase * 1.7) * Math.min(speed, 10) * 0.25 * DEG;
+    ctx.save(); ctx.translate(728, 232); ctx.rotate(sway); ctx.translate(-728, -232);
+    fill('M726,232 C736,200 752,176 776,150 C764,180 750,206 734,236 Z', '#59c14a');
+    fill('M722,232 C722,196 730,168 742,140 C744,172 738,202 730,234 Z', '#79d464');
+    fill('M728,230 C748,212 772,200 800,196 C778,212 756,226 734,240 Z', '#4aad3d');
+    ctx.restore();
+  }
+
+  // ------------------------------------------------------------ body parts
+  const FOOT = 'M-11,-14 L-13,6 C-14,15 -9,20 -1,20 L42,22 C51,22 53,13 46,6 C38,0 22,-6 12,-18 Z';
+  const SOLE = 'M-12,18 C-8,22 30,24 46,22';
+  function leg(hip, knee, ank, footAng, skin, boot, far) {
+    fill(capsule(hip, knee, 22, 14), skin);
+    const bt = lerp(hip, knee, 0.66), calf = lerp(knee, ank, 0.33);
+    fill(capsule(bt, knee, 17, 15), boot);
+    fill(capsule(knee, calf, 14.5, 15), boot);
+    fill(capsule(calf, ank, 15, 9.5), boot);
+    fill(band(bt, lerp(hip, knee, 0.715), 18.5, 18), far ? HAIR_D : TEAL);
+    if (!far) {
+      const n = perp(norm(sub(ank, knee)));
+      line(add(lerp(knee, ank, 0.15), mul(n, -9)), add(lerp(knee, ank, 0.8), mul(n, -9)), BLK_HI, 3);
+    }
+    ctx.save(); ctx.translate(ank.x, ank.y); ctx.rotate(footAng * DEG);
+    fill(FOOT, boot); stroke(SOLE, far ? HAIR_D : TEAL, 3.5);
+    ctx.restore();
+  }
+  function arm(sh, elb, wr, grip, skin, sleeve, far) {
+    const trim = far ? HAIR_D : TEAL;
+    fill(capsule(sh, elb, 11, 9), skin);
+    const s0 = lerp(sh, elb, 0.45);
+    fill(capsule(s0, elb, 12.5, 12), sleeve);
+    fill(band(s0, lerp(sh, elb, 0.55), 13, 13), trim);
+    fill(capsule(elb, lerp(elb, wr, 0.6), 12, 13), sleeve);
+    const u = norm(sub(wr, elb)), n = perp(u), a = lerp(elb, wr, 0.55), cuff = lerp(elb, wr, 0.92);
+    const p1 = add(cuff, mul(n, 22)), p2 = sub(cuff, mul(n, 22)), q = add(cuff, mul(u, 6));
+    const sl = new Path2D();
+    sl.moveTo(a.x + n.x * 13, a.y + n.y * 13); sl.lineTo(p1.x, p1.y); sl.quadraticCurveTo(q.x, q.y, p2.x, p2.y);
+    sl.lineTo(a.x - n.x * 13, a.y - n.y * 13); sl.closePath();
+    fill(sl, sleeve);
+    const tr = new Path2D(); tr.moveTo(p1.x, p1.y); tr.quadraticCurveTo(q.x, q.y, p2.x, p2.y);
+    stroke(tr, trim, 3.5);
+    if (!far) {
+      const ua = norm(sub(elb, sh)), m = add(lerp(sh, elb, 0.24), mul(perp(ua), -1));
+      ctx.save(); ctx.translate(m.x, m.y); ctx.rotate(Math.atan2(ua.y, ua.x) - Math.PI / 2);
+      ctx.fillStyle = '#e0405c'; ctx.font = 'bold 10px Arial, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('01', 0, 0); ctx.restore();
+    }
+    fill(ellipse(grip.x + 1, grip.y + 1, 11, 9.5), skin);
+  }
+  function skirt(hip, knee) {
+    const u = norm(sub(knee, hip)), n = perp(u);
+    const top = (s, e) => add(lerp(hip, knee, s), mul(n, -(22 - 8 * s + e)));
+    const bot = (s, e) => add(lerp(hip, knee, s), mul(n, (22 - 8 * s + e)));
+    const WB = V(404, 302), WF = V(452, 298), HT = top(0.4, 5), HB = bot(0.34, 4), mid = lerp(HT, HB, 0.5);
+    const amp = Math.min(speed, 12) * 0.55;
+    const flut = (x, y, k) => V(x - amp * 0.3 * (k / 6), y + amp * (k / 6) * Math.sin(phase * 2.2 + k * 0.9));
+    const fp = [[392, 366], [372, 372], [360, 356], [338, 360], [332, 342], [312, 340], [318, 324]].map(([x, y], k) => flut(x, y, k));
+    const c1 = add(mid, mul(u, 7));
+    const p = new Path2D();
+    p.moveTo(WB.x, WB.y); p.lineTo(WF.x, WF.y);
+    p.bezierCurveTo(WF.x + 18, WF.y + 6, HT.x - 14, HT.y - 10, HT.x, HT.y);
+    p.quadraticCurveTo(c1.x, c1.y, HB.x, HB.y);
+    p.bezierCurveTo(HB.x - 20, HB.y + 6, 410, 372, fp[0].x, fp[0].y);
+    fp.slice(1).forEach(q => p.lineTo(q.x, q.y));
+    const cb = flut(340, 318, 5);
+    p.bezierCurveTo(cb.x, cb.y, 372, 308, WB.x, WB.y); p.closePath();
+    fill(p, BLK);
+    const hem = new Path2D(), h1 = add(HT, mul(u, -9)), h2 = add(mid, mul(u, -3)), h3 = add(HB, mul(u, -9));
+    hem.moveTo(h1.x, h1.y); hem.quadraticCurveTo(h2.x, h2.y, h3.x, h3.y);
+    stroke(hem, TEAL, 3.5);
+    const tp = [[386, 358], [370, 362], [360, 348], [340, 350], [336, 336], [322, 333]].map(([x, y], k) => flut(x, y, k));
+    const trim = new Path2D(); trim.moveTo(tp[0].x, tp[0].y); tp.slice(1).forEach(q => trim.lineTo(q.x, q.y));
+    stroke(trim, TEAL, 3.5);
+    const pl = new Path2D();
+    [[V(416, 306), flut(360, 352, 3)], [V(428, 306), flut(392, 360, 1)], [V(440, 304), lerp(HT, HB, 0.3)], [V(448, 304), lerp(HT, HB, 0.7)]]
+      .forEach(([a, b]) => { pl.moveTo(a.x, a.y); pl.lineTo(b.x, b.y); });
+    stroke(pl, '#43454e', 2.2);
+  }
+  function torso(pz) {
+    ctx.save(); ctx.translate(0, pz.bob);
+    fill('M468,140 L494,140 L486,192 L460,192 Z', SKIN);
+    fill('M468,150 L494,148 L491,166 Z', SKIN_SH);
+    fill('M402,306 C400,262 410,222 428,200 C436,192 448,188 460,186 L486,186 C496,196 501,216 499,234 C496,254 472,278 456,302 Z', SHIRT);
+    fill('M402,306 C400,262 410,222 428,200 C432,232 428,276 422,304 Z', SHIRT_SH, 0.7);
+    stroke('M484,226 C488,240 480,254 468,262', SHIRT_SH, 2.5);
+    ctx.restore();
+    fill('M402,298 L454,294 L454,306 L402,310 Z', BLK);
+    ctx.save(); ctx.translate(0, pz.bob);
+    fill('M462,186 L470,206 L450,200 Z', SHIRT); stroke('M462,186 L470,206 L450,200 Z', TEAL, 2.5);
+    fill('M486,186 L478,206 L496,198 Z', SHIRT); stroke('M486,186 L478,206 L496,198 Z', TEAL, 2.5);
+    fill('M469,200 L480,200 L478,209 L471,209 Z', HAIR_D);
+    const tieAng = (-Math.min(speed, 12) * 1.6 + Math.sin(phase * 3) * Math.min(speed, 12) * 0.7) * DEG;
+    ctx.translate(475, 208); ctx.rotate(tieAng); ctx.translate(-475, -208);
+    fill('M471,208 L479,208 L470,258 L460,264 L457,254 Z', TEAL);
+    stroke('M475,211 L462,256', HAIR_D, 1.5);
+    ctx.restore();
+  }
+  function hands() {
+    const g = GRIP_N;
+    line(V(g.x - 10, g.y + 2), V(g.x + 14, g.y - 6), '#3c3f46', 9);
+    fill(`M${g.x - 6},${g.y - 8} C${g.x + 6},${g.y - 12} ${g.x + 12},${g.y + 2} ${g.x + 4},${g.y + 8} C${g.x - 4},${g.y + 10} ${g.x - 10},${g.y + 4} ${g.x - 6},${g.y - 8} Z`, SKIN);
+    stroke(`M${g.x + 1},${g.y - 6} q6,4 2,12 M${g.x + 6},${g.y - 7} q5,4 2,11`, SKIN_SH, 1.5);
+    const sx = bellShake > 0 ? Math.sin(bellShake * 1.8) * 2.5 : 0;
+    fill(circle(620 + sx, 287, 7), '#ffd34d'); stroke(circle(620 + sx, 287, 7), '#d1a52a', 2);
+  }
+
+  // ------------------------------------------------------------ head (local coords, origin = skull centre)
+  const EYE = 'M-12,-8 Q0,-14 12,-9 Q14,4 9,12 Q0,16 -9,11 Q-13,2 -12,-8 Z';
+  const BANGS = (() => {
+    const seq = [['v', 41, -10], ['t', 33, 5], ['v', 26, -12], ['t', 19, 6], ['v', 12, -14], ['t', 4, 18], ['v', -3, -12],
+      ['t', -10, 6], ['v', -16, -13], ['t', -24, 4], ['v', -30, -10], ['t', -37, 9], ['v', -42, -4]];
+    let d = 'M-48,12 C-52,-42 -22,-62 2,-62 C28,-62 54,-42 48,12 ', prev = [48, 12];
+    for (const [k, x, y] of seq) {
+      const cx = (prev[0] + x) / 2 + (k === 'v' ? 0 : (x > 0 ? 3 : -3)), cy = (prev[1] + y) / 2 + (k === 't' ? 4 : 0);
+      d += `Q${cx},${cy} ${x},${y} `; prev = [x, y];
+    }
+    return d + 'Q-46,4 -48,12 Z';
+  })();
+  function eye(cx, cy, mirror, closed) {
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(mirror ? -1.08 : 1.08, 1.08);
+    if (closed) {
+      stroke('M-13,2 Q0,10 13,2', '#262130', 3);
+      stroke('M-13,2 L-18,-1', '#262130', 2.2);
+    } else {
+      fill(EYE, '#ffffff');
+      ctx.save(); ctx.clip(P(EYE));
+      const g = ctx.createLinearGradient(0, -11, 0, 14);
+      g.addColorStop(0, '#0b4f4d'); g.addColorStop(0.55, '#1f9c94'); g.addColorStop(1, '#7ff2e4');
+      fill(ellipse(0.5, 1.5, 8.5, 12.5), g);
+      fill(ellipse(0.5, 2.5, 4, 6.5), '#08312f');
+      fill('M-13,-9 Q0,-15 13,-10 L13,-3 Q0,-8 -13,-2 Z', '#06302e', 0.4);
+      ctx.restore();
+      fill(circle(3.5, -3.5, 3.6), '#ffffff'); fill(circle(-3.5, 7, 1.7), '#ffffff');
+      stroke('M-15,-5 Q-2,-17 14,-10', '#262130', 3.8);
+      stroke('M-14,-5 L-19,-9 M-14,-3 L-18,-1', '#262130', 2.2);
+      stroke('M-6,13.5 Q1,15.5 7,12.5', '#b9776a', 1.2);
+    }
+    ctx.restore();
+  }
+  function head(pz) {
+    ctx.save(); ctx.translate(pz.head.x, pz.head.y); ctx.rotate(pz.headAng);
+    fill('M-50,6 C-56,-44 -24,-62 2,-62 C30,-62 58,-44 52,6 L50,54 Q0,66 -48,54 Z', HAIR_D);
+    fill('M-35,-12 C-36,16 -27,36 -9,48 Q1,56 11,48 C29,36 37,16 35,-12 Z', SKIN);
+    fill('M-35,-12 C-36,16 -27,36 -9,48 C-22,32 -28,14 -27,-6 Z', SKIN_SH, 0.45);
+    const closed = blinkFor > 0;
+    eye(-17, 14, false, closed); eye(18, 14, true, closed);
+    fill(ellipse(-21, 30, 7.5, 3.5), '#ff9db6', 0.55); fill(ellipse(23, 30, 7.5, 3.5), '#ff9db6', 0.55);
+    stroke('M2,29 l1.5,2.5', '#d99a88', 1.5);
+    const sing = notes.length && speed > 0.5 ? 0.6 + 0.4 * Math.abs(Math.sin(clock * 0.12)) : 0;
+    ctx.save(); ctx.translate(2.5, 38); ctx.scale(1, 1 + sing * 0.5); ctx.translate(-2.5, -38);
+    fill('M-5,38 Q2,48 10,38 Q2,40.5 -5,38 Z', '#e8687f'); stroke('M-5,38 Q2,48 10,38 Q2,40.5 -5,38 Z', '#a8455a', 1.1);
+    fill('M-1,42.5 Q2.5,45 6,42', '#ff9aae');
+    ctx.restore();
+    const hg = ctx.createLinearGradient(0, -62, 0, 18);
+    hg.addColorStop(0, HAIR_L); hg.addColorStop(0.5, HAIR); hg.addColorStop(1, HAIR_D);
+    fill(BANGS, hg);
+    stroke('M-30,-42 C-14,-54 14,-56 32,-46', '#c9fff8', 5, 0.65);
+    stroke('M4,-40 L4,14 M-12,-36 L-10,4 M20,-36 L19,4 M-28,-30 L-24,2 M34,-30 L33,3', HAIR_D, 1.4, 0.55);
+    stroke('M-25,-4 Q-17,-8 -8,-5 M10,-5 Q19,-8 27,-4', HAIR_DD, 1.8, 0.75);
+    const lockAng = (Math.min(speed, 12) * 0.9 + Math.sin(phase * 2.4) * Math.min(speed, 12) * 0.35) * DEG;
+    ctx.save(); ctx.translate(-42, -6); ctx.rotate(lockAng); ctx.translate(42, 6);
+    fill('M-48,-8 C-49,28 -54,62 -66,100 Q-58,96 -53,88 C-44,60 -38,30 -33,0 Z', HAIR);
+    stroke('M-43,6 C-45,36 -50,62 -58,86', HAIR_D, 1.5);
+    ctx.restore();
+    ctx.save(); ctx.translate(42, -6); ctx.rotate(lockAng * 0.8); ctx.translate(-42, 6);
+    fill('M47,-8 C50,28 47,62 37,102 Q32,94 29,86 C35,58 35,30 33,2 Z', HAIR);
+    stroke('M42,8 C44,38 42,64 35,88', HAIR_D, 1.5);
+    ctx.restore();
+    stroke('M-53,4 C-56,-68 56,-68 53,4', '#5f636c', 5);
+    stroke('M52,28 Q46,48 16,45', '#5f636c', 3);
+    fill(ellipse(14, 45, 4.5, 3.2), TEAL);
+    const glow = 0.55 + 0.45 * Math.sin(clock * 0.08);
+    for (const x of [-61, 45]) {
+      fill(rrect(x, 0, 16, 32, 7), '#3e4149');
+      stroke(rrect(x + 4, 6, 8, 20, 4), TEAL, 2.5, 0.5 + glow * 0.5);
+    }
+    for (const [t, r] of [[TIE_R, -25], [TIE_L, 25]]) {
+      ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(r * DEG);
+      fill(rrect(-9, -12, 18, 24, 3), '#2d2e35');
+      stroke(rrect(-5, -8, 10, 16, 2), PINK, 2.5);
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  // ------------------------------------------------------------ frame
+  function draw() {
+    ctx.setTransform(S, 0, 0, S, 0, 0);
+    const pz = pose();
+    background();
+    drawTail(ropeB, 11, 26, [[0, '#6fd8cd'], [1, HAIR_DD]], [[0.35, 0.1, 0.85, HAIR_DD, 2], [-0.3, 0.15, 0.7, HAIR_DD, 2]]);
+    drawTail(ropeA, 12, 30, [[0, '#9ff0e6'], [0.55, HAIR], [1, HAIR_D]],
+      [[0.45, 0.06, 0.82, HAIR_D, 2.2], [-0.1, 0.12, 0.9, HAIR_D, 2], [-0.55, 0.2, 0.7, '#c8fff7', 2.5]]);
+    // far side
+    line(BB, pz.pedF, '#7d838b', 8);
+    fill(rrect(pz.pedF.x - 15, pz.pedF.y - 3, 30, 7, 2), '#3a3c42');
+    leg(HIP_F, pz.kneeF, pz.ankF, pz.footF, SKIN_FAR, BLK_FAR, true);
+    arm(pz.shF, pz.elbF, pz.wrF, GRIP_F, SKIN_FAR, BLK_FAR, true);
+    bikeBack(pz);
+    // near side
+    line(BB, pz.pedN, '#c7cdd4', 9);
+    fill(circle(BB.x, BB.y, 8), '#8e949c');
+    fill(rrect(pz.pedN.x - 16, pz.pedN.y - 2, 32, 8, 2), '#4a4d55');
+    leg(HIP_N, pz.kneeN, pz.ankN, pz.footN, SKIN, BLK, false);
+    skirt(HIP_N, pz.kneeN);
+    torso(pz);
+    arm(pz.shN, pz.elbN, pz.wrN, GRIP_N, SKIN, BLK, false);
+    hands();
+    head(pz);
+    // notes + petals
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    for (const n of notes) {
+      ctx.globalAlpha = Math.max(Math.min(n.life * 1.5, 1), 0);
+      ctx.fillStyle = n.col; ctx.font = `bold ${n.size}px "Noto Sans SC", sans-serif`;
+      ctx.fillText(n.ch, n.x + Math.sin(n.age * 0.08) * 6, n.y);
+    }
+    ctx.globalAlpha = 1;
+    for (const p of petals) {
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.scale(p.s, p.s);
+      fill('M0,-6 C5,-6 7,0 0,6 C-7,0 -5,-6 0,-6 Z', '#ffb7cd', 0.9);
+      ctx.restore();
+    }
+  }
+
+  function simulate(dt) {
+    speed += (target - speed) * Math.min(0.05 * dt, 1);
+    if (Math.abs(target - speed) < 0.01) speed = target;
+    dist += speed * dt;
+    phase += dt * (0.03 + speed * 0.012);
+    clock += dt;
+    const steps = Math.max(1, Math.min(4, Math.round(dt)));
+    for (let k = 0; k < steps; k++) {
+      const t = ties(pose());
+      stepRope(ropeB, t.b, dirB(), 0.022, 1.7);
+      stepRope(ropeA, t.a, dirA(), -0.006, 0);
+    }
+    if (blinkFor > 0) blinkFor -= dt;
+    else if ((blinkIn -= dt) <= 0) { blinkFor = 8; blinkIn = rand(150, 320); }
+    if (bellShake > 0) bellShake = Math.max(0, bellShake - dt * 0.4);
+    if (speed > 0.5 && (humIn -= dt) <= 0) {
+      humIn = rand(50, 90);
+      const pz = pose();
+      notes.push({ x: pz.head.x + 10, y: pz.head.y + 30, vx: -0.4 - speed * 0.07, vy: -0.7, life: 1, age: 0,
+        ch: Math.random() < 0.5 ? '♪' : '♫', col: Math.random() < 0.7 ? TEAL : PINK, size: rand(22, 32) });
+    }
+    for (const n of notes) { n.x += n.vx * dt; n.y += n.vy * dt; n.life -= 0.007 * dt; n.age += dt; }
+    for (let i = notes.length - 1; i >= 0; i--) if (notes[i].life <= 0) notes.splice(i, 1);
+    for (const p of petals) {
+      p.x -= (0.5 + speed * 0.9) * dt; p.y += (0.35 + 0.4 * Math.sin(clock * 0.02 + p.ph)) * dt; p.r += p.spin * dt;
+      if (p.x < -20) { p.x = W + rand(10, 200); p.y = rand(0, 560); }
+      if (p.y > 620) { p.y = -10; }
+    }
+    for (const s of streaks) {
+      s.x -= speed * 2.6 * dt;
+      if (s.x + s.l < 0) { s.x = W + rand(0, 300); s.y = rand(230, 520); s.l = rand(60, 150); }
+    }
+  }
+
+  // seed the hair so the first frame already shows it in the wind
+  (() => {
+    const t = ties(pose());
+    seedRope(ropeA, t.a, dirA()); seedRope(ropeB, t.b, dirB());
+    for (let i = 0; i < 400; i++) { const tt = ties(pose()); stepRope(ropeB, tt.b, dirB(), 0.022, 1.7); stepRope(ropeA, tt.a, dirA(), -0.006, 0); }
+  })();
+
+  let last = performance.now(), raf = 0;
+  function loop(now) {
+    const dt = Math.min((now - last) / 16.667, 4); last = now;
+    simulate(dt); draw();
+    raf = requestAnimationFrame(loop);
+  }
+  function start() { if (raf) return; last = performance.now(); raf = requestAnimationFrame(loop); }
+  function stop() { cancelAnimationFrame(raf); raf = 0; }
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = cv.clientWidth || W;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(w * 0.7 * dpr);
+    S = cv.width / W;
+    draw();
+  }
+  new ResizeObserver(resize).observe(cv);
+
+  // ------------------------------------------------------------ controls
+  const kmh = v => (v * 60 * 0.00317 * 3.6).toFixed(1);
+  const showSpeed = () => { speedOut.textContent = `${kmh(target)} km/h`; };
+  speedInput.addEventListener('input', () => { target = +speedInput.value; showSpeed(); });
+  showSpeed();
+
+  const pauseBtn = document.getElementById('pause');
+  const syncPause = () => { pauseBtn.textContent = paused ? '继续' : '暂停'; pauseBtn.setAttribute('aria-pressed', String(paused)); };
+  pauseBtn.addEventListener('click', () => { paused = !paused; syncPause(); paused ? stop() : start(); });
+  syncPause();
+
+  let audio = null;
+  document.getElementById('bell').addEventListener('click', () => {
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const t0 = audio.currentTime;
+      [[2093, 0], [2637, 0.14]].forEach(([f, d]) => {
+        const o = audio.createOscillator(), g = audio.createGain();
+        o.type = 'sine'; o.frequency.value = f;
+        g.gain.setValueAtTime(0.0001, t0 + d); g.gain.exponentialRampToValueAtTime(0.25, t0 + d + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + d + 1.1);
+        o.connect(g).connect(audio.destination); o.start(t0 + d); o.stop(t0 + d + 1.2);
+      });
+    } catch (e) { /* sound is optional */ }
+    bellShake = 6;
+    for (let i = 0; i < 3; i++) notes.push({ x: 622 + i * 14, y: 270 - i * 8, vx: -0.3 - speed * 0.05, vy: -1.1 - i * 0.2, life: 1, age: i * 20, ch: '♪', col: PINK, size: 26 });
+    if (paused) draw();
+  });
+
+  if (!paused) start(); else draw();
+})();
+</script>

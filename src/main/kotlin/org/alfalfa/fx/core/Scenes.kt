@@ -10,7 +10,7 @@ class Scenes internal constructor(private val builder: Builder) {
         BOOTSTRAP2("bootstrap2.css"), BOOTSTRAP3("bootstrap3.css")
     }
 
-    internal class Builder {
+    class Builder {
         var theme: ThemeEnum = ThemeEnum.BOOTSTRAP2
         var externalCssFiles = mutableListOf<URL>()
 
